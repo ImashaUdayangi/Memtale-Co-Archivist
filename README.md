@@ -1,0 +1,2 @@
+# Memtale: AI Co-Archivist
+This repository contains the implementation of Memtale, an AI-driven system designed to archive life stories for retirees using speech, NLP, emotion tagging, and semantic search.
