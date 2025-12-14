@@ -25,3 +25,5 @@ print("Aware emotion:", emo_vec)
 
 print("\nJS Divergence (Full vs Naive):", js_divergence(full_vec, naive_vec))
 print("JS Divergence (Full vs Aware):", js_divergence(full_vec, emo_vec))
+
+#issuecommit*/

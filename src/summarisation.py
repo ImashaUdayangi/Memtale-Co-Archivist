@@ -32,3 +32,5 @@ def emotion_aware_summary(text: str, max_length: int = 120, min_length: int = 50
         return (base + ". " + chosen + ".").strip()
 
     return base
+
+#issuecommit*/

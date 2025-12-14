@@ -24,3 +24,5 @@ def js_divergence(p: dict, q: dict, eps: float = 1e-12) -> float:
         return sum(a[i] * (_safe_log(a[i]) - _safe_log(b[i])) for i in range(len(keys)))
 
     return (kl(P, M) + kl(Q, M)) / 2
+
+#issuecommit*/
