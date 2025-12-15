@@ -1,0 +1,5 @@
+system,P@5,nDCG@5,MRR
+B1_TFIDF_full,0.2,0.95,0.9333333333333333
+B2_Sem_full,0.2,1.0,1.0
+B3_Sem_naiveSum,0.2,1.0,1.0
+Ours_Sem+Emo_awareSum,0.2,1.0,1.0
