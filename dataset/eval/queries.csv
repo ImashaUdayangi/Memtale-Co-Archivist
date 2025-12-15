@@ -1,0 +1,11 @@
+query_id,query_text,query_type,source_story_id
+q1,moving to a new city and leaving family,semantic,1
+q2,a joyful family moment,emotion,2
+q3,losing someone and feeling sadness,emotion,3
+q4,my first job interview experience,semantic,4
+q5,a frightening accident but staying calm,emotion,5
+q6,starting a new chapter away from home,semantic,1
+q7,feeling grateful during a family gathering,emotion,2
+q8,memories that still hurt after loss,emotion,3
+q9,feeling proud after getting a job offer,emotion,4
+q10,getting help after being scared,emotion,5
