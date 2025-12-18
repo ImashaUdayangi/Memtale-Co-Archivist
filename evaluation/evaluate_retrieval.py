@@ -33,13 +33,13 @@ def ndcg_at_k(ranked_ids, rel_dict, k=5):
 
 
 def main():
-    stories = pd.read_csv("dataset/raw_stories.csv")  # later replace with your real corpus
+    stories = pd.read_csv("dataset/raw/raw_stories.csv")  # later replace with your real corpus
     queries = pd.read_csv("dataset/eval/queries.csv")
     qrels = pd.read_csv("dataset/eval/qrels.csv")
 
     # Build text collections
-    story_ids = stories["id"].tolist()
-    full_texts = stories["text"].tolist()
+    story_ids = stories["story_id"].astype(int).tolist()
+    full_texts = (stories["title"].fillna("") + " " + stories["transcript"].fillna("")).tolist()
 
     naive_summaries = [naive_summary(t) for t in full_texts]
     aware_summaries = [emotion_aware_summary(t) for t in full_texts]
