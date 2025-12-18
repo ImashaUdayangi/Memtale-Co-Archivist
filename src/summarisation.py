@@ -3,22 +3,37 @@ from transformers import pipeline
 
 _summariser = pipeline("summarization", model="facebook/bart-base")
 
+# BART has a max input length (~1024 tokens). StoryCorps transcripts can exceed that.
+# Truncating prevents: IndexError: index out of range in self
+def _truncate_chars(text: str, max_chars: int = 3500) -> str:
+    text = (text or "").replace("\n", " ").strip()
+    return text[:max_chars]
+
 def naive_summary(text: str, max_length: int = 120, min_length: int = 50) -> str:
-    out = _summariser(text, max_length=max_length, min_length=min_length, do_sample=False)
+    text = _truncate_chars(text, max_chars=3500)
+    out = _summariser(
+        text,
+        max_length=max_length,
+        min_length=min_length,
+        do_sample=False,
+        truncation=True
+    )
     return out[0]["summary_text"].strip()
 
 def emotion_aware_summary(text: str, max_length: int = 120, min_length: int = 50) -> str:
     """
-    Minimal 'emotion-aware' variant for BART (non-instructional):
-    - Create base summary
-    - Append 1 emotional sentence from the original story if missing
-    This creates a measurable difference without LLM prompting.
+    Minimal 'emotion-aware' variant for BART:
+    - Create base summary (on truncated text)
+    - Append 1 emotional sentence from the original text if missing
     """
-    base = naive_summary(text, max_length=max_length, min_length=min_length)
+    text_clean = _truncate_chars(text, max_chars=3500)
+    base = naive_summary(text_clean, max_length=max_length, min_length=min_length)
 
     # Simple heuristic: keep one sentence that contains emotion words
     emotion_cues = ["happy", "sad", "scared", "afraid", "proud", "pain", "joy", "angry", "excited", "cry", "love"]
-    sentences = [s.strip() for s in text.replace("\n", " ").split(".") if s.strip()]
+
+    # Use the same truncated version here so sentence splitting doesn't scan huge text
+    sentences = [s.strip() for s in text_clean.split(".") if s.strip()]
 
     chosen = ""
     for s in sentences:
@@ -29,8 +44,6 @@ def emotion_aware_summary(text: str, max_length: int = 120, min_length: int = 50
 
     # If base doesn't already contain that emotional sentence, append it.
     if chosen and chosen.lower() not in base.lower():
-        return (base + ". " + chosen + ".").strip()
+        return (base.rstrip(".") + ". " + chosen.rstrip(".") + ".").strip()
 
     return base
-
-#issuecommit*/
