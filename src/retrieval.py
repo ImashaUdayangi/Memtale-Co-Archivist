@@ -58,12 +58,23 @@ def emotion_aware_retrieval(
     # emotion sims
     keys = sorted(query_emotion.keys())
     q_e = np.array([query_emotion[k] for k in keys], dtype=float)
-    q_e = q_e / (np.linalg.norm(q_e) + 1e-12)
+    q_norm = np.linalg.norm(q_e)
+
+    # 🔹 FALLBACK: if query has no meaningful emotion, use semantic only
+    if q_norm < 1e-6:
+        final = sem_sims
+        ranked = np.argsort(final)[::-1][:top_k]
+        return ranked.tolist(), final[ranked].tolist(), sem_sims[ranked].tolist(), None
+
+    # normalize query emotion
+    q_e = q_e / q_norm
+
 
     emo_sims = []
     for e in doc_emotions:
         d_e = np.array([e[k] for k in keys], dtype=float)
-        d_e = d_e / (np.linalg.norm(d_e) + 1e-12)
+        d_norm = np.linalg.norm(d_e)
+        d_e = d_e / (d_norm + 1e-12)
         emo_sims.append(float(d_e @ q_e))
 
     emo_sims = np.array(emo_sims)
