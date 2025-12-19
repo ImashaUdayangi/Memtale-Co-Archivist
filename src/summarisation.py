@@ -1,7 +1,14 @@
 # src/summarisation.py
 from transformers import pipeline
 
-_summariser = pipeline("summarization", model="facebook/bart-base")
+_summariser = pipeline(
+    "summarization",
+    model="facebook/bart-base",
+    tokenizer="facebook/bart-base",
+)
+
+# Force tokenizer max length for safe truncation behavior
+_summariser.tokenizer.model_max_length = 1024
 
 # BART has a max input length (~1024 tokens). StoryCorps transcripts can exceed that.
 # Truncating prevents: IndexError: index out of range in self
