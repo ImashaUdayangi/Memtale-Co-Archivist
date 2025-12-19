@@ -1,13 +1,13 @@
-query_id,story_id,query_text,query_type
-q1,1,childhood memories and growing up in a close family,semantic
-q2,1,a happy memory about grandparents and family togetherness,emotion
-q3,2,working for decades and staying committed to a job,semantic
-q4,2,advice about aging well and living simply,semantic
-q5,2,a calm and content perspective on getting older,emotion
-q6,3,how two people met and became long-term partners,semantic
-q7,3,a loving memory about marriage and staying best friends,emotion
-q8,4,a birth story with complications and recovery,semantic
-q9,4,a difficult decision to leave an unhealthy relationship and start over,semantic
-q10,4,resilience and hope while raising a child as a single mother,emotion
-q11,5,family road trip memories and important life experiences,semantic
-q12,5,wisdom about making your own happiness during hard times,emotion
+query_id,query_text,query_type
+q1,childhood memories and growing up in a close family,semantic
+q2,a happy memory about grandparents and family togetherness,emotion
+q3,working for decades and staying committed to a job,semantic
+q4,advice about aging well and living simply,semantic
+q5,a calm and content perspective on getting older,emotion
+q6,how two people met and became long-term partners,semantic
+q7,a loving memory about marriage and staying best friends,emotion
+q8,a birth story with complications and recovery,semantic
+q9,a difficult decision to leave an unhealthy relationship and start over,semantic
+q10,resilience and hope while raising a child as a single mother,emotion
+q11,family road trip memories and important life experiences,semantic
+q12,wisdom about making your own happiness during hard times,emotion
