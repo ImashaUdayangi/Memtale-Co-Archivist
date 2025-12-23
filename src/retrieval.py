@@ -1,26 +1,26 @@
 # src/retrieval.py
 import numpy as np
-from sklearn.feature_extraction.text import TfidfVectorizer
-from sklearn.metrics.pairwise import cosine_similarity
+import re
+from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 
 # SBERT model (good default)
 _sbert = SentenceTransformer("all-MiniLM-L6-v2")
 
-def _cosine(a: np.ndarray, b: np.ndarray) -> float:
-    return float(cosine_similarity([a], [b])[0][0])
+# -------------------------
+# B1: Keyword retrieval (BM25)
+# -------------------------
+def _tokenize(text: str):
+    # simple word tokenizer (fast + stable)
+    return re.findall(r"\b\w+\b", (text or "").lower())
 
-# -------------------------
-# B1: Keyword retrieval (TF-IDF)
-# -------------------------
-def tfidf_retrieval(query: str, docs: list[str], top_k: int = 5):
-    vec = TfidfVectorizer(stop_words="english")
-    X = vec.fit_transform(docs + [query])
-    doc_mat = X[:-1]
-    q_vec = X[-1]
-    sims = cosine_similarity(q_vec, doc_mat)[0]
-    ranked = np.argsort(sims)[::-1][:top_k]
-    return ranked.tolist(), sims[ranked].tolist()
+def bm25_retrieval(query: str, docs: list[str], top_k: int = 5):
+    tokenized_docs = [_tokenize(d) for d in docs]
+    bm25 = BM25Okapi(tokenized_docs, k1=1.5, b=0.75)
+
+    scores = bm25.get_scores(_tokenize(query))  # numpy array
+    ranked = np.argsort(scores)[::-1][:top_k]
+    return ranked.tolist(), scores[ranked].tolist()
 
 # -------------------------
 # B2/B3: Semantic retrieval (SBERT)
