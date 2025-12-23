@@ -5,7 +5,9 @@ from pathlib import Path
 IN_PATH = Path("dataset/raw/emotion-emotion_69k.csv")              # Kaggle file
 OUT_PATH = Path("dataset/raw/empathetic_stories.csv")  # output clean dataset
 
-TARGET_N = 3000
+TARGET_PER_EMOTION = 10     # ~10 per emotion
+MIN_WORDS = 200
+MAX_WORDS = 600
 SOURCE_NAME = "EmpatheticDialogues_Kaggle"
 
 
@@ -57,43 +59,41 @@ def main():
     # 5) Group rows with the same Situation (+ emotion) into ONE story row
     # Note: Using (Situation, emotion) avoids mixing different emotions for same situation if any exist.
     grouped = (
-        df.groupby(["Situation", "emotion"], as_index=False)["turn_text"]
-        .apply(lambda s: " ".join(list(s)))
-        .rename(columns={"turn_text": "Story"})
+        df.groupby(["Situation", "emotion"])["turn_text"]
+        .apply(lambda s: " ".join(s.tolist()))
+        .reset_index(name="Story")
     )
 
     # Rename to target schema
     grouped = grouped.rename(columns={"Situation": "situation", "emotion": "emotion_label"})
     grouped["source"] = SOURCE_NAME
 
-    # 6) Sample 3000 with balanced emotions
-    # If some emotions have few examples after grouping, take as many as possible.
-    emotions = grouped["emotion_label"].unique().tolist()
-    n_emotions = len(emotions)
-    per_emotion = max(1, TARGET_N // n_emotions)
+    # --- NEW: enforce Story length 200–600 words ---
+    def _word_count(t: str) -> int:
+        return len((t or "").split())
+
+    def _truncate_words(t: str, max_words: int) -> str:
+        words = (t or "").split()
+        return " ".join(words[:max_words])
+
+    # truncate long stories to MAX_WORDS
+    grouped["Story"] = grouped["Story"].apply(lambda t: _truncate_words(t, MAX_WORDS))
+
+    # drop short stories below MIN_WORDS
+    grouped = grouped[grouped["Story"].apply(_word_count) >= MIN_WORDS].copy()
+
+    # 6) Balanced sampling: ~10 per emotion
+    emotions = sorted(grouped["emotion_label"].unique().tolist())
 
     parts = []
     for emo in emotions:
         chunk = grouped[grouped["emotion_label"] == emo]
-        if len(chunk) <= per_emotion:
+        if len(chunk) <= TARGET_PER_EMOTION:
             parts.append(chunk)
         else:
-            parts.append(chunk.sample(n=per_emotion, random_state=42))
+            parts.append(chunk.sample(n=TARGET_PER_EMOTION, random_state=42))
 
-    sampled = pd.concat(parts, ignore_index=True)
-
-    # If this still below TARGET_N (because some emotions had too few),
-    # top up from the remaining pool.
-    if len(sampled) < TARGET_N:
-        remaining = grouped.merge(sampled, how="left", indicator=True)
-        remaining = remaining[remaining["_merge"] == "left_only"].drop(columns=["_merge"])
-        need = TARGET_N - len(sampled)
-        if len(remaining) > 0:
-            topup = remaining.sample(n=min(need, len(remaining)), random_state=42)
-            sampled = pd.concat([sampled, topup], ignore_index=True)
-
-    # If exceeded TARGET_N slightly due to rounding, trim
-    sampled = sampled.sample(n=min(TARGET_N, len(sampled)), random_state=42).reset_index(drop=True)
+    sampled = pd.concat(parts, ignore_index=True).reset_index(drop=True)
 
     # 7) Add story_id
     sampled.insert(0, "story_id", range(1, len(sampled) + 1))
