@@ -1,13 +1,101 @@
 query_id,query_text,query_type
-q1,childhood memories and growing up in a close family,semantic
-q2,a happy memory about grandparents and family togetherness,emotion
-q3,working for decades and staying committed to a job,semantic
-q4,advice about aging well and living simply,semantic
-q5,a calm and content perspective on getting older,emotion
-q6,how two people met and became long-term partners,semantic
-q7,a loving memory about marriage and staying best friends,emotion
-q8,a birth story with complications and recovery,semantic
-q9,a difficult decision to leave an unhealthy relationship and start over,semantic
-q10,resilience and hope while raising a child as a single mother,emotion
-q11,family road trip memories and important life experiences,semantic
-q12,wisdom about making your own happiness during hard times,emotion
+q1,My husband and I have been married 22 years. Our,semantic
+q2,a content experience,emotion
+q3,I can't wait to get to the ocean!,semantic
+q4,a anticipating experience,emotion
+q5,I just knew I was going to pass my drivers,semantic
+q6,a confident experience,emotion
+q7,"I almost make a list before I go food shopping,",semantic
+q8,a prepared experience,emotion
+q9,I lost my car keys at a bar last night.,semantic
+q10,a angry experience,emotion
+q11,I went for a run in the woods with my,semantic
+q12,a terrified experience,emotion
+q13,I know that I will make the NHL next season.,semantic
+q14,a confident experience,emotion
+q15,"I feel pretty confident about asking for a raise, I",semantic
+q16,a confident experience,emotion
+q17,Hurricane season is right around the corner and I'm a,semantic
+q18,a anxious experience,emotion
+q19,I am super sad that people do not want to,semantic
+q20,a sad experience,emotion
+q21,My kid scored the winning shot in her basketball game,semantic
+q22,a proud experience,emotion
+q23,I do not want to go to school Monday. They,semantic
+q24,a apprehensive experience,emotion
+q25,I got a promotion at work recently,semantic
+q26,a proud experience,emotion
+q27,I left my son with a babysitter for the first,semantic
+q28,a trusting experience,emotion
+q29,My grandmother passed away two weeks in 2005. She had,semantic
+q30,a sentimental experience,emotion
+q31,I think I want to rescue a cat.,semantic
+q32,a caring experience,emotion
+q33,I got very good marks in university exams. I must,semantic
+q34,a grateful experience,emotion
+q35,when i came across an old diary,semantic
+q36,a sentimental experience,emotion
+q37,I have had a great week!,semantic
+q38,a joyful experience,emotion
+q39,"Even though I have no intentions on getting married, watching",semantic
+q40,a sentimental experience,emotion
+q41,my husband helps with housework and cooking,semantic
+q42,a grateful experience,emotion
+q43,I was surprised to see my wife actually cooked dinner,semantic
+q44,a surprised experience,emotion
+q45,i forgot my belt at home,semantic
+q46,a embarrassed experience,emotion
+q47,I have an amazing wife. She is so smart and,semantic
+q48,a proud experience,emotion
+q49,I can't believe how big my dog has gotten. 7,semantic
+q50,a surprised experience,emotion
+q51,I am a little down because my computer stopped working,semantic
+q52,a sad experience,emotion
+q53,I can't believe game of thrones is ending. I thought,semantic
+q54,a surprised experience,emotion
+q55,I finished my kids birthday candy tonight after they went,semantic
+q56,a guilty experience,emotion
+q57,My daughter had an end of the year play at,semantic
+q58,a proud experience,emotion
+q59,I am so hopeful for a bright future,semantic
+q60,a excited experience,emotion
+q61,One time I was robbed at gun point.,semantic
+q62,a afraid experience,emotion
+q63,I am looking forward to my job interview. I know,semantic
+q64,a confident experience,emotion
+q65,I lost my favorite bracelet... but after looking for a,semantic
+q66,a grateful experience,emotion
+q67,My girlfriend was talking to another man.,semantic
+q68,a jealous experience,emotion
+q69,It pisses me off when someone interrupts me in the,semantic
+q70,a angry experience,emotion
+q71,felt caring when my child was born,semantic
+q72,a caring experience,emotion
+q73,There was a few times but the most memerable and,semantic
+q74,a ashamed experience,emotion
+q75,I really get nervous when I have to drive.,semantic
+q76,a afraid experience,emotion
+q77,Yesterday I came across a huge snake in my back,semantic
+q78,a afraid experience,emotion
+q79,Just last week I had a conflict. I wanted to,semantic
+q80,a faithful experience,emotion
+q81,I had an argument last week with my wife. She,semantic
+q82,a devastated experience,emotion
+q83,I worked in a nursing home while I was in,semantic
+q84,a caring experience,emotion
+q85,We moved to a new area and my son needed,semantic
+q86,a hopeful experience,emotion
+q87,Got asked to my boss' office. Thought I was getting,semantic
+q88,a surprised experience,emotion
+q89,I am scared of Trump.,semantic
+q90,a apprehensive experience,emotion
+q91,"I blamed my oldest son for losing my headphones, but",semantic
+q92,a ashamed experience,emotion
+q93,I still talk with my ex after 2 years. We,semantic
+q94,a trusting experience,emotion
+q95,i was crushed when i didnt win the lottery,semantic
+q96,a devastated experience,emotion
+q97,Stressful events are going on but I trust that things,semantic
+q98,a faithful experience,emotion
+q99,A colleague at my job took credit for months of,semantic
+q100,a angry experience,emotion
