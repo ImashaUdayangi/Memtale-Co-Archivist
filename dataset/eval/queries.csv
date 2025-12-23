@@ -1,101 +1,101 @@
 query_id,query_text,query_type
-q1,i was scared to walk home alone,semantic
-q2,a terrified experience,emotion
-q3,I am looking forward to the new season of Game of Thrones.,semantic
-q4,a anticipating experience,emotion
-q5,My son stayed over my friends out. She said he was so,semantic
-q6,a impressed experience,emotion
-q7,My friend just moved into a new home. Its a nice place,semantic
-q8,a jealous experience,emotion
-q9,My girlfiend and I had just gotten intoa huge fight the other,semantic
-q10,a surprised experience,emotion
-q11,I went outside my house yesterday and there was a big snake,semantic
-q12,a afraid experience,emotion
-q13,I was very sad when I watched the ending to Orange is,semantic
-q14,a sad experience,emotion
-q15,"The year was 2016, and I was severely worried that Hilary might",semantic
-q16,a anxious experience,emotion
-q17,i was happy to see that my vacation time was approved at,semantic
-q18,a excited experience,emotion
-q19,I saw someone on tv today during lunch that talked about money.,semantic
-q20,a impressed experience,emotion
-q21,Ugghhh I hate this printer!!,semantic
-q22,a angry experience,emotion
-q23,I was on vacation and I saw a ghost at a hotel.,semantic
-q24,a afraid experience,emotion
-q25,When my girlfriend cheated on me i let her go and i,semantic
-q26,a faithful experience,emotion
-q27,I was coming home from shopping yesterday and there was a horrible,semantic
-q28,a terrified experience,emotion
-q29,I saw a dog eating a dead bird on the ground. It,semantic
-q30,a disgusted experience,emotion
-q31,My mom and sister threw me a baby shower when I came,semantic
-q32,a surprised experience,emotion
-q33,every time i see holloween commercials it takes me back,semantic
-q34,a nostalgic experience,emotion
-q35,once in my early twenties I remember going to a party and,semantic
+q1,I can start to see my mother showing early signs of dementia.,semantic
+q2,a caring experience,emotion
+q3,Once. I met this beautiful girl and she chose my best friend,semantic
+q4,a jealous experience,emotion
+q5,I was sitting in class and people talking behind me made me,semantic
+q6,a annoyed experience,emotion
+q7,I went to Greece and was amazed by all the beautiful landscape,semantic
+q8,a impressed experience,emotion
+q9,Once I was staying at a friends house and a really bad,semantic
+q10,a afraid experience,emotion
+q11,"My mom, who's in her 60s, lost her best friend today, who",semantic
+q12,a devastated experience,emotion
+q13,Mom bought me groceries once,semantic
+q14,a grateful experience,emotion
+q15,I told my husband that I was going to see a friend,semantic
+q16,a guilty experience,emotion
+q17,"I blamed my oldest son for losing my headphones, but it turns",semantic
+q18,a ashamed experience,emotion
+q19,"I was disappointed with the new Mario Tennis game, it did not",semantic
+q20,a disappointed experience,emotion
+q21,I found the baby braclet they put on my father when he,semantic
+q22,a sentimental experience,emotion
+q23,I love my kids so much. I want them to live with,semantic
+q24,a caring experience,emotion
+q25,My cat sat on my bag right after she came out of,semantic
+q26,a furious experience,emotion
+q27,"Scratched someone's car in the parking lot today, bumped it a little",semantic
+q28,a grateful experience,emotion
+q29,My brother got a full ride to college due to my dad,semantic
+q30,a jealous experience,emotion
+q31,I'm 99% positive I can handle myself in a street fight. I've,semantic
+q32,a confident experience,emotion
+q33,I feel guilty for smoking in the house today when it was,semantic
+q34,a guilty experience,emotion
+q35,My son ran out without his pants on at a party. I,semantic
 q36,a embarrassed experience,emotion
-q37,I heard a car alarm go off at work and started getting,semantic
-q38,a embarrassed experience,emotion
-q39,"That scene in bambi, where the mother dies!",semantic
-q40,a sentimental experience,emotion
-q41,"I am so happy that the preseason for football starts tomorrow, the",semantic
-q42,a joyful experience,emotion
-q43,My dad gave me this gold chain way back when I was,semantic
-q44,a sentimental experience,emotion
-q45,I collect antiques and I found a really old coin. It was,semantic
-q46,a joyful experience,emotion
-q47,I was expecting a person to show up at my meeting. They,semantic
-q48,a anxious experience,emotion
-q49,My son stole a car from an elderly man today. Never have,semantic
-q50,a disappointed experience,emotion
-q51,I really like a new perfume that I've tried but it's so,semantic
-q52,a apprehensive experience,emotion
-q53,I am waiting on some test results. I went to the doctor,semantic
-q54,a anxious experience,emotion
-q55,School started back this week. I checked and checked to make sure,semantic
-q56,a prepared experience,emotion
-q57,I'm finally meeting my online girlfriend in person next weekend.,semantic
-q58,a excited experience,emotion
-q59,My husband got me a new laptop! I was so shocked and,semantic
-q60,a grateful experience,emotion
-q61,My son just graduated from high school. He should have graduated last,semantic
-q62,a disappointed experience,emotion
-q63,I recently noticed how much weight I gained over the past year,semantic
-q64,a disappointed experience,emotion
-q65,Installing new light fixture and everything went wrong. Very aggravating!,semantic
-q66,a annoyed experience,emotion
-q67,I made a brilliant pizza the other day,semantic
+q37,I lost a job I had for many years. I wasn't sure,semantic
+q38,a trusting experience,emotion
+q39,I just moved to a new city for a new job and,semantic
+q40,a lonely experience,emotion
+q41,I went to a piano recital the other day and watched all,semantic
+q42,a impressed experience,emotion
+q43,My husband went out of town for the weekend and I stayed,semantic
+q44,a grateful experience,emotion
+q45,i bought cbd oil in hopes my anxiety would go away,semantic
+q46,a hopeful experience,emotion
+q47,When i left my money on the bus,semantic
+q48,a devastated experience,emotion
+q49,"I have a hard time eating, I am allergic to so much!",semantic
+q50,a anxious experience,emotion
+q51,I did not get the promotion I wanted,semantic
+q52,a disappointed experience,emotion
+q53,My state sent me a tax bill for my newly opened business,semantic
+q54,a surprised experience,emotion
+q55,"Shortly after I got married, my wife and I decided that we",semantic
+q56,a anticipating experience,emotion
+q57,My best friend left me alone at the bar while I was,semantic
+q58,a disappointed experience,emotion
+q59,I'm in school right now and unable to pay for much since,semantic
+q60,a guilty experience,emotion
+q61,I tried escargot this summer on a cruise. I don't know why,semantic
+q62,a disgusted experience,emotion
+q63,I took a flight last week and there was awful turbulence. It,semantic
+q64,a afraid experience,emotion
+q65,I was going to a vacation house that is far from the,semantic
+q66,a furious experience,emotion
+q67,My son said his first word today. I was filled with pride.,semantic
 q68,a proud experience,emotion
-q69,"I lost a loved one last week, I felt like I was",semantic
-q70,a devastated experience,emotion
-q71,My kids are not behaving at all today. They are really getting,semantic
-q72,a annoyed experience,emotion
-q73,I was taking a bowl of ravioli down the 3 or 4,semantic
-q74,a ashamed experience,emotion
-q75,I am looking forward to having donuts later. I can't wait to,semantic
-q76,a anticipating experience,emotion
-q77,I had to takd my driver license test so I could get,semantic
-q78,a prepared experience,emotion
-q79,I've been training for about 6 years now and I have a,semantic
-q80,a proud experience,emotion
-q81,I was looking through some old photo albums. They brought up so,semantic
-q82,a nostalgic experience,emotion
-q83,My high school friends decided to gather and have dinner together. They,semantic
-q84,a disappointed experience,emotion
-q85,i felt lonley after my girlfriend leave me alone,semantic
-q86,a lonely experience,emotion
-q87,I shouldn't have left work early today but I was feeling super,semantic
-q88,a guilty experience,emotion
-q89,I eat ice cream every time my kids take a nap. That,semantic
-q90,a ashamed experience,emotion
-q91,My cat sat on my bag right after she came out of,semantic
-q92,a furious experience,emotion
-q93,I have to make a pineapple upside down cake later. I am,semantic
-q94,a confident experience,emotion
-q95,I am very upset today. The work raise that I been working,semantic
-q96,a disappointed experience,emotion
-q97,im ready for next week!,semantic
-q98,a prepared experience,emotion
-q99,A tree branch broke off the tree in our backyard yesterday during,semantic
-q100,a devastated experience,emotion
+q69,I am starting my first year of college and I am so,semantic
+q70,a terrified experience,emotion
+q71,I found a stray kitten outside the pizza place the other day.,semantic
+q72,a caring experience,emotion
+q73,My mom is doing her best to put me through college on,semantic
+q74,a grateful experience,emotion
+q75,My daughter didnt have a good first year at her new school.,semantic
+q76,a hopeful experience,emotion
+q77,I couldn't get into my car in the parking lot the other,semantic
+q78,a embarrassed experience,emotion
+q79,I told my son not to drink near my computer and he,semantic
+q80,a furious experience,emotion
+q81,"I have an irrational fear of flying, yet I planned a trip",semantic
+q82,a afraid experience,emotion
+q83,I am going on a vacation soon and can not wait.,semantic
+q84,a excited experience,emotion
+q85,My grandma passed away earlier this year. We used to always get,semantic
+q86,a sentimental experience,emotion
+q87,"I get sentimental about my brothers, they are very important to me",semantic
+q88,a sentimental experience,emotion
+q89,My husband took a 30 hour round trip road trip and will,semantic
+q90,a anxious experience,emotion
+q91,I am not sure my son is going to do well in,semantic
+q92,a afraid experience,emotion
+q93,"I remember when I bought my first car, it feels just like",semantic
+q94,a excited experience,emotion
+q95,"As a child, my parents would take us on a big road",semantic
+q96,a nostalgic experience,emotion
+q97,My brother is starting his first semester at the college I wanted,semantic
+q98,a joyful experience,emotion
+q99,I didn't do well in Viology this year. Im gonna kill it,semantic
+q100,a confident experience,emotion
