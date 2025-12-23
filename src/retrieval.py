@@ -16,6 +16,7 @@ def _tokenize(text: str):
 
 def bm25_retrieval(query: str, docs: list[str], top_k: int = 5):
     tokenized_docs = [_tokenize(d) for d in docs]
+    tokenized_docs = [toks if toks else ["_empty_"] for toks in tokenized_docs] 
     bm25 = BM25Okapi(tokenized_docs, k1=1.5, b=0.75)
 
     scores = bm25.get_scores(_tokenize(query))  # numpy array
