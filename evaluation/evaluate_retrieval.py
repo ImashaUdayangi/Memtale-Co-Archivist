@@ -3,7 +3,7 @@ import numpy as np
 
 from src.summarisation import naive_summary, emotion_aware_summary
 from src.setl2 import setl2_emotion_vector
-from src.retrieval import tfidf_retrieval, semantic_retrieval, emotion_aware_retrieval
+from src.retrieval import bm25_retrieval, semantic_retrieval, emotion_aware_retrieval
 
 
 def precision_at_k(ranked_ids, relevant_set, k=5):
@@ -33,13 +33,13 @@ def ndcg_at_k(ranked_ids, rel_dict, k=5):
 
 
 def main():
-    stories = pd.read_csv("dataset/raw/raw_stories.csv")  # later replace with your real corpus
+    stories = pd.read_csv("dataset/raw/empathetic_stories.csv")  
     queries = pd.read_csv("dataset/eval/queries.csv")
     qrels = pd.read_csv("dataset/eval/qrels.csv")
 
     # Build text collections
     story_ids = stories["story_id"].astype(int).tolist()
-    full_texts = (stories["title"].fillna("") + " " + stories["transcript"].fillna("")).tolist()
+    full_texts = (stories["situation"].fillna("") + " " + stories["Story"].fillna("")).tolist()
 
     naive_summaries = [naive_summary(t) for t in full_texts]
     aware_summaries = [emotion_aware_summary(t) for t in full_texts]
@@ -61,10 +61,10 @@ def main():
         rel_dict = qrels_map[qid]
         relevant_set = set(rel_dict.keys())
 
-        # B1 TF-IDF full
-        idx, _ = tfidf_retrieval(qtext, full_texts, top_k=len(full_texts))
+        # B1 BM25 full
+        idx, _ = bm25_retrieval(qtext, full_texts, top_k=len(full_texts))
         ranked_ids = [story_ids[i] for i in idx]
-        results.append(("B1_TFIDF_full", qid, qtype,
+        results.append(("B1_BM25_full", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
                         ndcg_at_k(ranked_ids, rel_dict, 5),
                         mrr(ranked_ids, relevant_set)))
