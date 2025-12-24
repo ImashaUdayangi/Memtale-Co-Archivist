@@ -41,8 +41,18 @@ def main():
     story_ids = stories["story_id"].astype(int).tolist()
     full_texts = (stories["situation"].fillna("") + " " + stories["Story"].fillna("")).tolist()
 
-    naive_summaries = [naive_summary(t) for t in full_texts]
-    aware_summaries = [emotion_aware_summary(t) for t in full_texts]
+    #REMOVE this (current, slow)
+    #//naive_summaries = [naive_summary(t) for t in full_texts]
+    #//aware_summaries = [emotion_aware_summary(t) for t in full_texts]
+
+    #Replace with(fast,cached) 48-55
+    summaries = pd.read_csv("dataset/cache/summaries.csv")
+
+    # IMPORTANT: keep the same order as stories
+    summaries = summaries.set_index("story_id").loc[story_ids].reset_index()
+
+    naive_summaries = summaries["naive_summary"].tolist()
+    aware_summaries = summaries["aware_summary"].tolist()
     aware_emotions = [setl2_emotion_vector(s) for s in aware_summaries]
 
     # Precompute qrels map
