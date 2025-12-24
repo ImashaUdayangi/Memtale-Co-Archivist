@@ -1,5 +1,9 @@
 # src/summarisation.py
 from transformers import pipeline
+from transformers.utils import logging as hf_logging
+
+# ✅ Stop HuggingFace from spamming warnings every call
+hf_logging.set_verbosity_error()
 
 _summariser = pipeline(
     "summarization",
@@ -8,33 +12,43 @@ _summariser = pipeline(
 )
 
 # Force tokenizer max length for safe truncation behavior
+# BART max input length (~1024 tokens). Truncate characters to be safe.
 _summariser.tokenizer.model_max_length = 1024
 
-# BART has a max input length (~1024 tokens). StoryCorps transcripts can exceed that.
-# Truncating prevents: IndexError: index out of range in self
 def _truncate_chars(text: str, max_chars: int = 3500) -> str:
     text = (text or "").replace("\n", " ").strip()
     return text[:max_chars]
 
-def naive_summary(text: str, max_length: int = 120, min_length: int = 50) -> str:
+def naive_summary(text: str, max_new_tokens: int = 120, min_length: int = 50) -> str:
     text = _truncate_chars(text, max_chars=3500)
+
+    # ✅ Use max_new_tokens ONLY (no max_length) => removes warning
     out = _summariser(
         text,
-        max_length=max_length,
+        max_new_tokens=max_new_tokens,
         min_length=min_length,
         do_sample=False,
         truncation=True
     )
     return out[0]["summary_text"].strip()
 
-def emotion_aware_summary(text: str, max_length: int = 120, min_length: int = 50) -> str:
+def emotion_aware_summary(
+    text: str,
+    base_summary: str | None = None,
+    max_new_tokens: int = 120,
+    min_length: int = 50
+) -> str:
     """
-    Minimal 'emotion-aware' variant for BART:
-    - Create base summary (on truncated text)
-    - Append 1 emotional sentence from the original text if missing
+    Minimal 'emotion-aware' variant:
+    - Use base summary (passed in) so we DON'T summarize twice
+    - Append 1 emotional sentence if missing
     """
     text_clean = _truncate_chars(text, max_chars=3500)
-    base = naive_summary(text_clean, max_length=max_length, min_length=min_length)
+
+    # If base summary already provided, don't call summarizer again
+    base = base_summary if base_summary is not None else naive_summary(
+        text_clean, max_new_tokens=max_new_tokens, min_length=min_length
+    )
 
     # Simple heuristic: keep one sentence that contains emotion words
     emotion_cues = ["happy", "sad", "scared", "afraid", "proud", "pain", "joy", "angry", "excited", "cry", "love"]
