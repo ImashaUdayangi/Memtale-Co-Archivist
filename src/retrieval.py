@@ -124,3 +124,42 @@ def emotion_aware_retrieval_vec(
     ranked = np.argsort(final)[::-1][:top_k]
 
     return ranked.tolist(), final[ranked].tolist(), sem_sims[ranked].tolist(), emo_sims[ranked].tolist()
+
+#Add baseline B4: BM25+SBERT Fusion (RRF)
+def rrf_fusion(
+    ranked_lists: list[list[int]],
+    k: int = 60
+) -> list[float]:
+    """
+    Reciprocal Rank Fusion (RRF).
+    Returns fused scores aligned to doc indices [0..N-1].
+    ranked_lists: each is a list of doc indices sorted best->worst
+    """
+    if not ranked_lists:
+        return []
+
+    # infer N from longest list
+    N = max(len(r) for r in ranked_lists)
+    scores = np.zeros(N, dtype=float)
+
+    for r in ranked_lists:
+        for rank, doc_idx in enumerate(r, start=1):
+            if doc_idx < N:
+                scores[doc_idx] += 1.0 / (k + rank)
+
+    return scores.tolist()
+
+
+def bm25_sbert_rrf_retrieval(query: str, docs: list[str], top_k: int = 5, rrf_k: int = 60):
+    """
+    B4 baseline: BM25 + SBERT fusion using RRF.
+    """
+    # get full rankings
+    bm25_ranked, _ = bm25_retrieval(query, docs, top_k=len(docs))
+    sem_ranked, _ = semantic_retrieval(query, docs, top_k=len(docs))
+
+    fused_scores = rrf_fusion([bm25_ranked, sem_ranked], k=rrf_k)
+    fused_scores = np.array(fused_scores)
+
+    ranked = np.argsort(fused_scores)[::-1][:top_k]
+    return ranked.tolist(), fused_scores[ranked].tolist()
