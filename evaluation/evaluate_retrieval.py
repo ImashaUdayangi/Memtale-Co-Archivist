@@ -3,7 +3,14 @@ import numpy as np
 
 from src.summarisation import naive_summary, emotion_aware_summary
 from src.setl2 import setl2_emotion_vector
-from src.retrieval import bm25_retrieval, semantic_retrieval, emotion_aware_retrieval
+from src.retrieval import (
+    bm25_retrieval,
+    semantic_retrieval,
+    emotion_aware_retrieval,
+    emotion_aware_retrieval_vec,
+    build_label_space,
+    onehot
+)
 
 
 def precision_at_k(ranked_ids, relevant_set, k=5):
@@ -40,6 +47,9 @@ def main():
     # Build text collections
     story_ids = stories["story_id"].astype(int).tolist()
     full_texts = (stories["situation"].fillna("") + " " + stories["Story"].fillna("")).tolist()
+
+    labels, label2i = build_label_space(stories["emotion_label"].tolist())
+    doc_label_vecs = np.vstack([onehot(lab, label2i) for lab in stories["emotion_label"].tolist()])
 
     #REMOVE this (current, slow)
     #//naive_summaries = [naive_summary(t) for t in full_texts]
@@ -96,9 +106,30 @@ def main():
                         mrr(ranked_ids, relevant_set)))
 
         # Ours semantic+emotion aware summaries
-        q_emotion = setl2_emotion_vector(qtext)
-        idx, _, _, _ = emotion_aware_retrieval(qtext, aware_summaries, aware_emotions, q_emotion,
-                                              alpha=0.7, top_k=len(aware_summaries))
+        if qtype == "emotion":
+            # parse label from: "a <emotion> experience"
+            emo = str(qtext).lower().replace("a ", "").replace(" experience", "").strip()
+            q_vec = onehot(emo, label2i)
+
+            idx, _, _, _ = emotion_aware_retrieval_vec(
+                qtext,
+                aware_summaries,
+                doc_label_vecs,
+                q_vec,
+                alpha=0.7,
+                top_k=len(aware_summaries)
+            )
+        else:
+            # semantic queries: keep your original NRC8-based emotion aware retrieval (or semantic-only)
+            q_emotion = setl2_emotion_vector(qtext)
+            idx, _, _, _ = emotion_aware_retrieval(
+                qtext,
+                aware_summaries,
+                aware_emotions,
+                q_emotion,
+                alpha=0.7,
+                top_k=len(aware_summaries)
+            )
         ranked_ids = [story_ids[i] for i in idx]
         results.append(("Ours_Sem+Emo_awareSum", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
