@@ -1,5 +1,6 @@
 import pandas as pd
 import numpy as np
+import argparse #According to multiple alpha values change
 
 from src.summarisation import naive_summary, emotion_aware_summary
 from src.setl2 import setl2_emotion_vector
@@ -40,6 +41,12 @@ def ndcg_at_k(ranked_ids, rel_dict, k=5):
 
 
 def main():
+    #According to multiple alpha values change
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--alpha", type=float, default=0.7, help="Weight for semantic vs emotion (0-1)")
+    args = parser.parse_args()
+    alpha = args.alpha
+
     stories = pd.read_csv("dataset/raw/empathetic_stories.csv")  
     queries = pd.read_csv("dataset/eval/queries.csv")
     qrels = pd.read_csv("dataset/eval/qrels.csv")
@@ -116,7 +123,7 @@ def main():
                 aware_summaries,
                 doc_label_vecs,
                 q_vec,
-                alpha=0.7,
+                alpha=alpha, #According to multiple alpha values change
                 top_k=len(aware_summaries)
             )
         else:
@@ -127,7 +134,7 @@ def main():
                 aware_summaries,
                 aware_emotions,
                 q_emotion,
-                alpha=0.7,
+                alpha=alpha, #According to multiple alpha values change
                 top_k=len(aware_summaries)
             )
         ranked_ids = [story_ids[i] for i in idx]
