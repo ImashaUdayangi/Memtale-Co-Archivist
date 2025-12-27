@@ -1,0 +1,3 @@
+test,metric,p_value
+Wilcoxon paired,"cos(full,aware) > cos(full,naive)",0.0014447363807206784
+Wilcoxon paired,"jsd(full,aware) < jsd(full,naive)",0.0012753263811365876
