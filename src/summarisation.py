@@ -2,13 +2,13 @@
 from transformers import pipeline
 from transformers.utils import logging as hf_logging
 
-# ✅ Stop HuggingFace from spamming warnings every call
+# Stop HuggingFace from spamming warnings every call
 hf_logging.set_verbosity_error()
 
 _summariser = pipeline(
     "summarization",
-    model="facebook/bart-base",
-    tokenizer="facebook/bart-base",
+    model="sshleifer/distilbart-cnn-12-6", #15th Jan changed from facebook/bart-base to reduce model size
+    tokenizer="sshleifer/distilbart-cnn-12-6",
 )
 
 # Force tokenizer max length for safe truncation behavior
@@ -19,10 +19,10 @@ def _truncate_chars(text: str, max_chars: int = 3500) -> str:
     text = (text or "").replace("\n", " ").strip()
     return text[:max_chars]
 
-def naive_summary(text: str, max_new_tokens: int = 120, min_length: int = 50) -> str:
+def naive_summary(text: str, max_new_tokens: int = 80, min_length: int = 30) -> str:
     text = _truncate_chars(text, max_chars=3500)
 
-    # ✅ Use max_new_tokens ONLY (no max_length) => removes warning
+    # Use max_new_tokens ONLY (no max_length) => removes warning
     out = _summariser(
         text,
         max_new_tokens=max_new_tokens,
@@ -35,8 +35,8 @@ def naive_summary(text: str, max_new_tokens: int = 120, min_length: int = 50) ->
 def emotion_aware_summary(
     text: str,
     base_summary: str | None = None,
-    max_new_tokens: int = 120,
-    min_length: int = 50
+    max_new_tokens: int = 80,
+    min_length: int = 30
 ) -> str:
     """
     Minimal 'emotion-aware' variant:
