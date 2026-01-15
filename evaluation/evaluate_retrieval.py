@@ -116,21 +116,24 @@ def main():
         qtext = row["query_text"]
         qtype = row["query_type"]
 
-        rel_dict = qrels_map[qid]
+        #rel_dict = qrels_map[qid] // 15th Jan changed as If ever a query is missing, it will crash.
+        rel_dict = qrels_map.get(qid, {})
+        if not rel_dict:
+            continue
         relevant_set = set(rel_dict.keys())
 
-        # B1 BM25 full
+        # B1 BM25 {index_mode}
         idx, _ = bm25_retrieval(qtext, index_texts, top_k=len(index_texts)) #index_texts - add after Implement rrf_fusion() for B4 , Indexing strategy experiment
         ranked_ids = [story_ids[i] for i in idx]
-        results.append(("B1_BM25_full", qid, qtype,
+        results.append((f"B1_BM25_{index_mode}", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
                         ndcg_at_k(ranked_ids, rel_dict, 5),
                         mrr(ranked_ids, relevant_set)))
 
-        # B2 semantic full
+        # B2 semantic {index_mode}
         idx, _ = semantic_retrieval(qtext, index_texts, top_k=len(index_texts)) #index_texts - add after Implement rrf_fusion() for B4 , Indexing strategy experiment
         ranked_ids = [story_ids[i] for i in idx]
-        results.append(("B2_Sem_full", qid, qtype,
+        results.append((f"B2_Sem_{index_mode}", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
                         ndcg_at_k(ranked_ids, rel_dict, 5),
                         mrr(ranked_ids, relevant_set)))
@@ -139,7 +142,7 @@ def main():
         # B4 fusion BM25 + SBERT (RRF) on current index texts
         idx, _ = bm25_sbert_rrf_retrieval(qtext, index_texts, top_k=len(index_texts))
         ranked_ids = [story_ids[i] for i in idx]
-        results.append(("B4_RRF_BM25+SBERT", qid, qtype,
+        results.append((f"B4_RRF_{index_mode}", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
                         ndcg_at_k(ranked_ids, rel_dict, 5),
                         mrr(ranked_ids, relevant_set)))
@@ -191,7 +194,7 @@ def main():
         #         top_k=len(aware_summaries)
         #     )
         ranked_ids = [story_ids[i] for i in idx]
-        results.append(("Ours_Sem+Emo_awareSum", qid, qtype,
+        results.append((f"Ours_Sem+Emo_awareSum", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
                         ndcg_at_k(ranked_ids, rel_dict, 5),
                         mrr(ranked_ids, relevant_set)))
