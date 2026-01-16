@@ -99,103 +99,103 @@ q97,I am so excited because I am starting a new job next,semantic
 q98,My oldest daughter had a hard time in school. She struggled with,semantic
 q99,I ran across a snake it our backyard. I shocked me.,semantic
 q100,I was in charge of the turkey during our last thanksgiving. I,semantic
-q101,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q102,a memory about waiting for something important and feeling on edge,emotion_intent
-q103,"a memory about feeling anxious and unsafe, like something bad might happen",emotion_intent
-q104,"a memory about feeling anxious and unsafe, like something bad might happen",emotion_intent
-q105,"a memory about feeling down and hurt, like you lost something important",emotion_intent
-q106,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q107,a memory about feeling thrilled and full of energy about something new,emotion_intent
-q108,"a memory about intense fear, like you were in real danger",emotion_intent
-q109,a memory about intense anger and wanting to react strongly,emotion_intent
-q110,a memory about feeling ready and organized for something important,emotion_intent
-q111,a memory about relying on someone and believing they would support you,emotion_intent
-q112,a memory about looking back warmly on the past and missing it,emotion_intent
-q113,a memory about being uncertain and nervous about what was coming next,emotion_intent
-q114,a memory about feeling ready and organized for something important,emotion_intent
-q115,"a memory about feeling alone or unsupported, even around other people",emotion_intent
-q116,a memory about worrying a lot and not being able to relax,emotion_intent
-q117,a memory about feeling accomplished after hard work paid off,emotion_intent
-q118,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q119,a memory about feeling strongly uncomfortable with something unpleasant,emotion_intent
-q120,a memory about relying on someone and believing they would support you,emotion_intent
-q121,a memory about feeling happy and uplifted by a positive moment,emotion_intent
-q122,a memory about feeling thrilled and full of energy about something new,emotion_intent
-q123,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q124,a memory about feeling awkward after a mistake in front of others,emotion_intent
-q125,"a memory about feeling anxious and unsafe, like something bad might happen",emotion_intent
-q126,a memory about waiting for something important and feeling on edge,emotion_intent
-q127,a memory about appreciating someone’s help or kindness,emotion_intent
-q128,a memory about something unexpected that changed how you felt,emotion_intent
-q129,a memory about feeling thrilled and full of energy about something new,emotion_intent
-q130,a memory about waiting for something important and feeling on edge,emotion_intent
-q131,a memory about looking back warmly on the past and missing it,emotion_intent
-q132,a memory about staying loyal and committed even when things were difficult,emotion_intent
-q133,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q134,a memory about intense anger and wanting to react strongly,emotion_intent
-q135,a memory about feeling accomplished after hard work paid off,emotion_intent
-q136,a memory about relying on someone and believing they would support you,emotion_intent
-q137,a memory about believing things could improve despite challenges,emotion_intent
-q138,a memory about relying on someone and believing they would support you,emotion_intent
-q139,a memory about admiring someone’s skills or a surprising achievement,emotion_intent
-q140,a memory about regretting something and wishing you could undo it,emotion_intent
-q141,a memory about regretting something and wishing you could undo it,emotion_intent
-q142,a memory about waiting for something important and feeling on edge,emotion_intent
-q143,a memory about feeling embarrassed and regretting something you did,emotion_intent
-q144,a memory about regretting something and wishing you could undo it,emotion_intent
-q145,a memory about intense anger and wanting to react strongly,emotion_intent
-q146,a memory about feeling furious after being treated unfairly or disrespected,emotion_intent
-q147,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q148,a memory about feeling happy and uplifted by a positive moment,emotion_intent
-q149,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q150,a memory about being uncertain and nervous about what was coming next,emotion_intent
-q151,a memory about appreciating someone’s help or kindness,emotion_intent
-q152,a memory about admiring someone’s skills or a surprising achievement,emotion_intent
-q153,a memory about intense anger and wanting to react strongly,emotion_intent
-q154,a memory about feeling happy and uplifted by a positive moment,emotion_intent
-q155,a memory about regretting something and wishing you could undo it,emotion_intent
-q156,a memory about feeling strongly uncomfortable with something unpleasant,emotion_intent
-q157,a memory about feeling accomplished after hard work paid off,emotion_intent
-q158,a memory about staying loyal and committed even when things were difficult,emotion_intent
-q159,a memory about being irritated by something small that kept happening,emotion_intent
-q160,a memory about feeling strongly uncomfortable with something unpleasant,emotion_intent
-q161,a memory about feeling strongly uncomfortable with something unpleasant,emotion_intent
-q162,a memory about believing things could improve despite challenges,emotion_intent
-q163,"a memory about intense fear, like you were in real danger",emotion_intent
-q164,a memory about something unexpected that changed how you felt,emotion_intent
-q165,a memory about feeling let down when something didn’t work out,emotion_intent
-q166,a memory about feeling capable and sure you could handle the situation,emotion_intent
-q167,a memory about being irritated by something small that kept happening,emotion_intent
-q168,a memory about feeling ready and organized for something important,emotion_intent
-q169,a memory about feeling awkward after a mistake in front of others,emotion_intent
-q170,a memory about believing things could improve despite challenges,emotion_intent
-q171,a memory about something unexpected that changed how you felt,emotion_intent
-q172,a memory about intense anger and wanting to react strongly,emotion_intent
-q173,a memory about regretting something and wishing you could undo it,emotion_intent
-q174,a memory about believing things could improve despite challenges,emotion_intent
-q175,a memory about feeling thrilled and full of energy about something new,emotion_intent
-q176,a memory about staying loyal and committed even when things were difficult,emotion_intent
-q177,a memory about feeling awkward after a mistake in front of others,emotion_intent
-q178,a memory about appreciating someone’s help or kindness,emotion_intent
-q179,a memory about feeling embarrassed and regretting something you did,emotion_intent
-q180,a memory about looking back warmly on the past and missing it,emotion_intent
-q181,a memory about looking back warmly on the past and missing it,emotion_intent
-q182,a memory about something unexpected that changed how you felt,emotion_intent
-q183,a memory about feeling capable and sure you could handle the situation,emotion_intent
-q184,a memory about feeling capable and sure you could handle the situation,emotion_intent
-q185,a memory about something unexpected that changed how you felt,emotion_intent
-q186,a memory about feeling accomplished after hard work paid off,emotion_intent
-q187,a memory about admiring someone’s skills or a surprising achievement,emotion_intent
-q188,a memory about feeling accomplished after hard work paid off,emotion_intent
-q189,a memory about regretting something and wishing you could undo it,emotion_intent
-q190,a memory about being irritated by something small that kept happening,emotion_intent
-q191,a memory about intense anger and wanting to react strongly,emotion_intent
-q192,a memory about feeling completely crushed after a big loss or setback,emotion_intent
-q193,a memory about feeling completely crushed after a big loss or setback,emotion_intent
-q194,a memory about wanting what someone else had and feeling bothered by it,emotion_intent
-q195,"a memory about feeling calm, satisfied, and at peace with how things were",emotion_intent
-q196,a memory about deep feelings tied to a meaningful person or moment,emotion_intent
-q197,"a memory about intense fear, like you were in real danger",emotion_intent
-q198,a memory about staying loyal and committed even when things were difficult,emotion_intent
-q199,a memory about feeling let down when something didn’t work out,emotion_intent
-q200,a memory about feeling strongly uncomfortable with something unpleasant,emotion_intent
+q101,"a memory about feeling calm, satisfied, and at peace with how things were. Context I watched a movie that I didn't really",emotion_intent
+q102,a memory about waiting for something important and feeling on edge. Context I can't wait till the weekend! I'm going,emotion_intent
+q103,"a memory about feeling anxious and unsafe, like something bad might happen. Context A wasp was in my room this morning.",emotion_intent
+q104,"a memory about feeling anxious and unsafe, like something bad might happen. Context Wasn't able to register for one of the",emotion_intent
+q105,"a memory about feeling down and hurt, like you lost something important. Context when it was my dads anniversary of death",emotion_intent
+q106,"a memory about feeling calm, satisfied, and at peace with how things were. Context Spur of the moment, my sister and I",emotion_intent
+q107,a memory about feeling thrilled and full of energy about something new. Context I can't wait until Halloween. I love scaring,emotion_intent
+q108,"a memory about intense fear, like you were in real danger. Context Last week someone broke in my house and",emotion_intent
+q109,a memory about intense anger and wanting to react strongly. Context I'm a pretty level-headed driver. But my one,emotion_intent
+q110,a memory about feeling ready and organized for something important. Context I was going on vacation. I planned out,emotion_intent
+q111,a memory about relying on someone and believing they would support you. Context I took my boots off after a long,emotion_intent
+q112,a memory about looking back warmly on the past and missing it. Context I remember a time when I actually had,emotion_intent
+q113,"a memory about being uncertain and nervous about what was coming next. Context My wife wants to have kids, but I'm",emotion_intent
+q114,"a memory about feeling ready and organized for something important. Context Last week, I had to give a speech.",emotion_intent
+q115,"a memory about feeling alone or unsupported, even around other people. Context You ever feel like you are the only",emotion_intent
+q116,a memory about worrying a lot and not being able to relax. Context A couple years ago where I live we,emotion_intent
+q117,a memory about feeling accomplished after hard work paid off. Context I was video chatting with my grandmother the,emotion_intent
+q118,"a memory about feeling calm, satisfied, and at peace with how things were. Context I just had a pretty good meal at",emotion_intent
+q119,a memory about feeling strongly uncomfortable with something unpleasant. Context At work I have to take out the,emotion_intent
+q120,a memory about relying on someone and believing they would support you. Context I like my new manager. He is so,emotion_intent
+q121,a memory about feeling happy and uplifted by a positive moment. Context A few weeks ago I went to a,emotion_intent
+q122,a memory about feeling thrilled and full of energy about something new. Context I published my first research paper and it,emotion_intent
+q123,"a memory about feeling calm, satisfied, and at peace with how things were. Context I had a meal at Whataburger yesterday. I",emotion_intent
+q124,"a memory about feeling awkward after a mistake in front of others. Context When I was a preteen, my parents and",emotion_intent
+q125,"a memory about feeling anxious and unsafe, like something bad might happen. Context I woke up in the middle of the",emotion_intent
+q126,a memory about waiting for something important and feeling on edge. Context I cant wait till I save enough money,emotion_intent
+q127,a memory about appreciating someone’s help or kindness. Context I am so happy all of my kids,emotion_intent
+q128,a memory about something unexpected that changed how you felt. Context Came home tonight and there was an owl,emotion_intent
+q129,a memory about feeling thrilled and full of energy about something new. Context I am so looking forward to the next,emotion_intent
+q130,a memory about waiting for something important and feeling on edge. Context The other evening watching the World Cup soccer,emotion_intent
+q131,"a memory about looking back warmly on the past and missing it. Context Every time my best friend comes in town,",emotion_intent
+q132,a memory about staying loyal and committed even when things were difficult. Context A friend of mine is going through a,emotion_intent
+q133,"a memory about feeling calm, satisfied, and at peace with how things were. Context The sun is shining adn have no plans",emotion_intent
+q134,a memory about intense anger and wanting to react strongly. Context I cant believe someone let my dog out,emotion_intent
+q135,a memory about feeling accomplished after hard work paid off. Context My daughter used the potty for her first,emotion_intent
+q136,a memory about relying on someone and believing they would support you. Context I'm planning a birthday party for my mom,emotion_intent
+q137,"a memory about believing things could improve despite challenges. Context I am looking forward to Christmas, I would",emotion_intent
+q138,a memory about relying on someone and believing they would support you. Context I had just gotten out of a bad,emotion_intent
+q139,a memory about admiring someone’s skills or a surprising achievement. Context My wife has really stepped up her cooking,emotion_intent
+q140,a memory about regretting something and wishing you could undo it. Context I took something from a boyfriend's house without,emotion_intent
+q141,a memory about regretting something and wishing you could undo it. Context i took my son to the park yesterday,emotion_intent
+q142,a memory about waiting for something important and feeling on edge. Context I'm gone vegetarian for over a year now.,emotion_intent
+q143,a memory about feeling embarrassed and regretting something you did. Context I remember a time where I was asked,emotion_intent
+q144,a memory about regretting something and wishing you could undo it. Context One time I skipped out on a family,emotion_intent
+q145,a memory about intense anger and wanting to react strongly. Context Dog ruined my curtains,emotion_intent
+q146,a memory about feeling furious after being treated unfairly or disrespected. Context i get so frustrated with my slacker coworker,emotion_intent
+q147,"a memory about feeling calm, satisfied, and at peace with how things were. Context This weekend was very stressful at work, but",emotion_intent
+q148,a memory about feeling happy and uplifted by a positive moment. Context My sister just had a baby two days,emotion_intent
+q149,"a memory about feeling calm, satisfied, and at peace with how things were. Context Can't complain about anything. I have a roof",emotion_intent
+q150,a memory about being uncertain and nervous about what was coming next. Context When my daughter told me she had news,emotion_intent
+q151,a memory about appreciating someone’s help or kindness. Context I was driving on the freeway the other,emotion_intent
+q152,a memory about admiring someone’s skills or a surprising achievement. Context I went to see the great pyramids recently,emotion_intent
+q153,a memory about intense anger and wanting to react strongly. Context I cant find my debit card. I think,emotion_intent
+q154,a memory about feeling happy and uplifted by a positive moment. Context My birthday is soon!,emotion_intent
+q155,a memory about regretting something and wishing you could undo it. Context My wife asked me to clean the house,emotion_intent
+q156,a memory about feeling strongly uncomfortable with something unpleasant. Context I was at a bus station and a,emotion_intent
+q157,a memory about feeling accomplished after hard work paid off. Context I received an excellent grade on an exam,emotion_intent
+q158,"a memory about staying loyal and committed even when things were difficult. Context My work laptop just recently crashed. However, I'm",emotion_intent
+q159,a memory about being irritated by something small that kept happening. Context I was at the post officer yesterday and,emotion_intent
+q160,a memory about feeling strongly uncomfortable with something unpleasant. Context I remember the first I got pooped on,emotion_intent
+q161,a memory about feeling strongly uncomfortable with something unpleasant. Context Have had this roommate for a year. Decided,emotion_intent
+q162,a memory about believing things could improve despite challenges. Context We moved to a new area and my,emotion_intent
+q163,"a memory about intense fear, like you were in real danger. Context I'm cooking diinner for my boyfriend tonight. Im",emotion_intent
+q164,a memory about something unexpected that changed how you felt. Context I found out that my wife is pregnant,emotion_intent
+q165,a memory about feeling let down when something didn’t work out. Context I was promised a cuddly bear from build,emotion_intent
+q166,a memory about feeling capable and sure you could handle the situation. Context I was playing the drums with my friend's,emotion_intent
+q167,"a memory about being irritated by something small that kept happening. Context I love the new apartment I moved into,",emotion_intent
+q168,a memory about feeling ready and organized for something important. Context My husband and I recently got a new,emotion_intent
+q169,"a memory about feeling awkward after a mistake in front of others. Context i was at the park with my son,",emotion_intent
+q170,a memory about believing things could improve despite challenges. Context I just found out that I'm pregnant. Its,emotion_intent
+q171,a memory about something unexpected that changed how you felt. Context I am surprised to see croatia went to,emotion_intent
+q172,a memory about intense anger and wanting to react strongly. Context My coworker blamed his bad work mistake on,emotion_intent
+q173,a memory about regretting something and wishing you could undo it. Context I feel bad about myself,emotion_intent
+q174,a memory about believing things could improve despite challenges. Context My mother recently applied for a much better,emotion_intent
+q175,a memory about feeling thrilled and full of energy about something new. Context I have a two week vacation coming out,emotion_intent
+q176,a memory about staying loyal and committed even when things were difficult. Context I'm very faithful in my community and the,emotion_intent
+q177,a memory about feeling awkward after a mistake in front of others. Context I once was at a high school football,emotion_intent
+q178,a memory about appreciating someone’s help or kindness. Context I received a full ride scholarship to my,emotion_intent
+q179,a memory about feeling embarrassed and regretting something you did. Context Someone asked me for some money to donate,emotion_intent
+q180,a memory about looking back warmly on the past and missing it. Context When I think about a certain even with,emotion_intent
+q181,a memory about looking back warmly on the past and missing it. Context My mom is moving in with me and,emotion_intent
+q182,a memory about something unexpected that changed how you felt. Context I got a random box of diapers the,emotion_intent
+q183,a memory about feeling capable and sure you could handle the situation. Context I am so sure that I will be,emotion_intent
+q184,a memory about feeling capable and sure you could handle the situation. Context I have a major work evaluation tomorrow. I,emotion_intent
+q185,a memory about something unexpected that changed how you felt. Context I was riding my motorcycle when a car,emotion_intent
+q186,a memory about feeling accomplished after hard work paid off. Context My son graduated from high school and is,emotion_intent
+q187,a memory about admiring someone’s skills or a surprising achievement. Context Took an 8 hour flight and was pleasantly,emotion_intent
+q188,a memory about feeling accomplished after hard work paid off. Context My dad had a problem with drinking and,emotion_intent
+q189,a memory about regretting something and wishing you could undo it. Context I can't believe I lied to my friend,emotion_intent
+q190,a memory about being irritated by something small that kept happening. Context I have not been in the best mood,emotion_intent
+q191,a memory about intense anger and wanting to react strongly. Context I sent my daughter shopping for school clothes.,emotion_intent
+q192,a memory about feeling completely crushed after a big loss or setback. Context my kids gold fish died,emotion_intent
+q193,a memory about feeling completely crushed after a big loss or setback. Context I saw my girlfriend with another man.,emotion_intent
+q194,a memory about wanting what someone else had and feeling bothered by it. Context My sister went to the movie with my,emotion_intent
+q195,"a memory about feeling calm, satisfied, and at peace with how things were. Context I moved into a new house recently. And",emotion_intent
+q196,a memory about deep feelings tied to a meaningful person or moment. Context I was forced due to a family emergency,emotion_intent
+q197,"a memory about intense fear, like you were in real danger. Context Last month, I show a pedestrian in front",emotion_intent
+q198,"a memory about staying loyal and committed even when things were difficult. Context I don't know where my life is heading,",emotion_intent
+q199,a memory about feeling let down when something didn’t work out. Context I'm pretty laid back. The only time I'll,emotion_intent
+q200,a memory about feeling strongly uncomfortable with something unpleasant. Context I fed my dog a new dog food,emotion_intent
