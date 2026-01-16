@@ -23,6 +23,17 @@ def bm25_retrieval(query: str, docs: list[str], top_k: int = 5):
     ranked = np.argsort(scores)[::-1][:top_k]
     return ranked.tolist(), scores[ranked].tolist()
 
+#16th Jan Add functions to build BM25 index and get scores for all docs
+def build_bm25_index(docs: list[str], k1: float = 1.5, b: float = 0.75) -> BM25Okapi:
+    tokenized_docs = [_tokenize(d) for d in docs]
+    tokenized_docs = [toks if toks else ["_empty_"] for toks in tokenized_docs]
+    return BM25Okapi(tokenized_docs, k1=k1, b=b)
+
+def bm25_rank(bm25: BM25Okapi, query: str) -> np.ndarray:
+    """Return BM25 scores for all docs."""
+    return np.asarray(bm25.get_scores(_tokenize(query)))
+#----
+
 # -------------------------
 # B2/B3: Semantic retrieval (SBERT)
 # -------------------------
@@ -163,3 +174,52 @@ def bm25_sbert_rrf_retrieval(query: str, docs: list[str], top_k: int = 5, rrf_k:
 
     ranked = np.argsort(fused_scores)[::-1][:top_k]
     return ranked.tolist(), fused_scores[ranked].tolist()
+
+
+#16th Jan Add a cached semantic retrieval function (precompute doc embeddings once)
+def semantic_retrieval_cached(q_emb: np.ndarray, doc_embs: np.ndarray, top_k: int = 5):
+    """
+    Fast semantic retrieval when doc embeddings are precomputed.
+    q_emb: (d,)
+    doc_embs: (N,d) normalized
+    """
+    sims = doc_embs @ q_emb
+    ranked = np.argsort(sims)[::-1][:top_k]
+    return ranked.tolist(), sims[ranked].tolist()
+
+#16th Jan Add a cached emotion-aware retrieval function (precompute doc embeddings once)
+def emotion_aware_retrieval_cached(
+    q_emb: np.ndarray,
+    doc_embs: np.ndarray,
+    doc_emotions: list[dict],
+    query_emotion: dict,
+    alpha: float = 0.7,
+    top_k: int = 5
+):
+    """
+    Cached version:
+    Score = alpha * (doc_embs @ q_emb) + (1-alpha) * emotion_sim
+    Assumes doc_embs and q_emb are already normalized.
+    """
+    sem_sims = doc_embs @ q_emb
+
+    keys = sorted(query_emotion.keys())
+    q_e = np.array([query_emotion[k] for k in keys], dtype=float)
+    q_norm = np.linalg.norm(q_e)
+
+    # if no emotion in query -> semantic only
+    if q_norm < 1e-6:
+        ranked = np.argsort(sem_sims)[::-1][:top_k]
+        return ranked.tolist(), sem_sims[ranked].tolist(), sem_sims[ranked].tolist(), None
+
+    q_e = q_e / q_norm
+
+    emo_sims = np.empty(len(doc_emotions), dtype=float)
+    for i, e in enumerate(doc_emotions):
+        d_e = np.array([e[k] for k in keys], dtype=float)
+        d_e = d_e / (np.linalg.norm(d_e) + 1e-12)
+        emo_sims[i] = float(d_e @ q_e)
+
+    final = alpha * sem_sims + (1 - alpha) * emo_sims
+    ranked = np.argsort(final)[::-1][:top_k]
+    return ranked.tolist(), final[ranked].tolist(), sem_sims[ranked].tolist(), emo_sims[ranked].tolist()
