@@ -2,15 +2,20 @@ import pandas as pd
 import numpy as np
 import argparse #According to multiple alpha values change
 from pathlib import Path 
-from src.retrieval import bm25_sbert_rrf_retrieval #add after Implement rrf_fusion() for B4
+from src.retrieval import rrf_fusion  # NEW (for fast B4 without recomputing embeddings)
+#Remove 16th Jan - from src.retrieval import bm25_sbert_rrf_retrieval #add after Implement rrf_fusion() for B4
+
 
 from src.summarisation import naive_summary, emotion_aware_summary
 from src.setl2 import setl2_emotion_vector
 from src.retrieval import (
-    bm25_retrieval,
-    semantic_retrieval,
-    emotion_aware_retrieval,
-) #emotion_aware_retrieval_vec,build_label_space, onehot - removed as no more onehot - 15th Jan
+    build_bm25_index,                   # NEW 16th Jan change
+    bm25_rank,                          # NEW 16th Jan change
+    emotion_aware_retrieval_cached,     # NEW 16th Jan change
+    embed_texts,                        # NEW 16th Jan change
+    semantic_retrieval_cached,          # NEW 16th Jan change
+) #semantic_retrieval,bm25_retrieval, emotion_aware_retrieval,- Remove 16th Jan change
+#emotion_aware_retrieval_vec,build_label_space, onehot - removed as no more onehot - 15th Jan
 
 
 def precision_at_k(ranked_ids, relevant_set, k=5):
@@ -81,7 +86,7 @@ def main():
 
     # Build text collections
     story_ids = stories["story_id"].astype(int).tolist()
-    full_texts = (stories["situation"].fillna("") + " " + stories["Story"].fillna("")).tolist()
+    #16th Jan Remove - full_texts = (stories["situation"].fillna("") + " " + stories["Story"].fillna("")).tolist()
 
     #15th Jan REMOVE as will never use gold labels for retrieval
     #labels, label2i = build_label_space(stories["emotion_label"].tolist())
@@ -97,10 +102,20 @@ def main():
     # IMPORTANT: keep the same order as stories
     summaries = summaries.set_index("story_id").loc[story_ids].reset_index()
 
-    index_texts = build_index_texts(index_mode, stories, summaries) #add after Implement rrf_fusion() for B4 , Indexing strategy experiment
-
     naive_summaries = summaries["naive_summary"].tolist()
     aware_summaries = summaries["aware_summary"].tolist()
+
+    index_texts = build_index_texts(index_mode, stories, summaries) #add after Implement rrf_fusion() for B4 , Indexing strategy experiment
+
+    bm25_index = build_bm25_index(index_texts)  # NEW: build once - 16th Jan
+
+    #16th Jan change to fast retrieval with precomputed embeddings
+    # ---------- NEW: Precompute embeddings once (FAST) ----------
+    index_doc_embs = embed_texts(index_texts)          
+    naive_doc_embs = embed_texts(naive_summaries)      
+    aware_doc_embs = embed_texts(aware_summaries)      
+    # ----------------------------------------------------------
+
     aware_emotions = [setl2_emotion_vector(s) for s in aware_summaries]
 
     # Precompute qrels map
@@ -111,10 +126,22 @@ def main():
 
     results = []
 
-    for _, row in queries.iterrows():
-        qid = row["query_id"]
-        qtext = row["query_text"]
-        qtype = row["query_type"]
+    #16th Jan change to fast retrieval with precomputed embeddings
+    query_texts = queries["query_text"].astype(str).tolist()
+    query_embs = embed_texts(query_texts)  # (200, d)
+
+    for i, row in enumerate(queries.itertuples(index=False)):
+        qid = row.query_id
+        qtext = row.query_text
+        qtype = row.query_type
+        q_emb = query_embs[i]
+    #^ Replace 16th Jan -for _, row in queries.iterrows():
+    #     qid = row["query_id"]
+    #     qtext = row["query_text"]
+    #     qtype = row["query_type"]
+
+        q_emb = query_embs[i]
+        #^ Replace 16th jan - q_emb = embed_texts([qtext])[0]  # NEW: compute once per query - 16th Jan
 
         #rel_dict = qrels_map[qid] // 15th Jan changed as If ever a query is missing, it will crash.
         rel_dict = qrels_map.get(qid, {})
@@ -123,7 +150,9 @@ def main():
         relevant_set = set(rel_dict.keys())
 
         # B1 BM25 {index_mode}
-        idx, _ = bm25_retrieval(qtext, index_texts, top_k=len(index_texts)) #index_texts - add after Implement rrf_fusion() for B4 , Indexing strategy experiment
+        #16th Jan Replace - idx, _ = bm25_retrieval(qtext, index_texts, top_k=len(index_texts)) #index_texts - add after Implement rrf_fusion() for B4 , Indexing strategy experiment
+        bm25_scores = bm25_rank(bm25_index, qtext)
+        idx = np.argsort(bm25_scores)[::-1].tolist()
         ranked_ids = [story_ids[i] for i in idx]
         results.append((f"B1_BM25_{index_mode}", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
@@ -131,7 +160,8 @@ def main():
                         mrr(ranked_ids, relevant_set)))
 
         # B2 semantic {index_mode}
-        idx, _ = semantic_retrieval(qtext, index_texts, top_k=len(index_texts)) #index_texts - add after Implement rrf_fusion() for B4 , Indexing strategy experiment
+        #16th Jan Replace - idx, _ = semantic_retrieval(qtext, index_texts, top_k=len(index_texts)) #index_texts - add after Implement rrf_fusion() for B4 , Indexing strategy experiment
+        idx, _ = semantic_retrieval_cached(q_emb, index_doc_embs, top_k=len(index_texts))  # NEW 16th Jan
         ranked_ids = [story_ids[i] for i in idx]
         results.append((f"B2_Sem_{index_mode}", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
@@ -140,7 +170,17 @@ def main():
 
         #add after Implement rrf_fusion() for B4
         # B4 fusion BM25 + SBERT (RRF) on current index texts
-        idx, _ = bm25_sbert_rrf_retrieval(qtext, index_texts, top_k=len(index_texts))
+        #16th Jan Replace - idx, _ = bm25_sbert_rrf_retrieval(qtext, index_texts, top_k=len(index_texts))
+        bm25_scores = bm25_rank(bm25_index, qtext)
+        bm25_ranked = np.argsort(bm25_scores)[::-1].tolist()
+
+        sem_sims = index_doc_embs @ q_emb
+        sem_ranked = np.argsort(sem_sims)[::-1].tolist()
+
+        fused_scores = np.array(rrf_fusion([bm25_ranked, sem_ranked], k=60))
+        idx = np.argsort(fused_scores)[::-1].tolist()
+        #----
+
         ranked_ids = [story_ids[i] for i in idx]
         results.append((f"B4_RRF_{index_mode}", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
@@ -148,7 +188,8 @@ def main():
                         mrr(ranked_ids, relevant_set)))
 
         # B3 semantic naive summaries
-        idx, _ = semantic_retrieval(qtext, naive_summaries, top_k=len(naive_summaries))
+        #16th Jan Replace - idx, _ = semantic_retrieval(qtext, naive_summaries, top_k=len(naive_summaries))
+        idx, _ = semantic_retrieval_cached(q_emb, naive_doc_embs, top_k=len(naive_summaries))  # NEW 16th Jan
         ranked_ids = [story_ids[i] for i in idx]
         results.append(("B3_Sem_naiveSum", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
@@ -159,14 +200,24 @@ def main():
         # Always derive emotion from the query text (never from gold labels / one-hot)
         q_emotion = setl2_emotion_vector(qtext)
 
-        idx, _, _, _ = emotion_aware_retrieval(
-            qtext,
-            aware_summaries,
-            aware_emotions,
-            q_emotion,
+        idx, _, _, _ = emotion_aware_retrieval_cached(
+            q_emb=q_emb,
+            doc_embs=aware_doc_embs,
+            doc_emotions=aware_emotions,
+            query_emotion=q_emotion,
             alpha=alpha,
             top_k=len(aware_summaries)
         )
+
+        #16th Jan Replace with cached version above
+        # idx, _, _, _ = emotion_aware_retrieval(
+        #     qtext,
+        #     aware_summaries,
+        #     aware_emotions,
+        #     q_emotion,
+        #     alpha=alpha,
+        #     top_k=len(aware_summaries)
+        # )
 
         #15th Jan REMOVE 
         # if qtype == "emotion":
