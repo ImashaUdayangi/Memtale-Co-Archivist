@@ -72,7 +72,7 @@ def build_index_texts(index_mode: str, stories: pd.DataFrame, summaries: pd.Data
 def main():
     #According to multiple alpha values change
     parser = argparse.ArgumentParser()
-    parser.add_argument("--alpha", type=float, default=0.8, help="Weight for semantic vs emotion (0-1)")
+    parser.add_argument("--alpha", type=float, default=0.9, help="Weight for semantic vs emotion (0-1)")
     parser.add_argument("--index", type=str, default="full",
                     choices=["full", "aware", "sit_aware"],
                     help="Indexing strategy for baselines (B1/B2/B4)") #add after Implement rrf_fusion() for B4 , Indexing strategy experiment
