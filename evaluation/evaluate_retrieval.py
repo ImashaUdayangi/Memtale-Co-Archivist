@@ -213,7 +213,13 @@ def main():
             idx = sem_ranked_all
         else:
             # emotion_intent queries: apply fusion only within candidate set
-            q_emotion = setl2_emotion_vector(qtext)
+            # q_emotion = setl2_emotion_vector(qtext) - Replace 17th Jan 
+            # Emotion-aware query expansion (text-only, no labels)
+            qtext_for_emotion = (
+                f"{qtext}. This experience involves emotions such as "
+                "sadness, joy, anger, fear, trust, disgust, surprise, and anticipation."
+            )
+            q_emotion = setl2_emotion_vector(qtext_for_emotion)
 
             # build candidate-only arrays
             cand_doc_embs = index_doc_embs[cand]
