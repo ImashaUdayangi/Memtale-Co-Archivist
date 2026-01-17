@@ -80,6 +80,8 @@ def main():
     alpha = args.alpha
     index_mode = args.index 
 
+    CANDIDATE_K = 200  # 17th Jan - only rerank top-200 candidates using emotion fusion
+
     stories = pd.read_csv("dataset/raw/empathetic_stories.csv")  
     queries = pd.read_csv("dataset/eval/queries.csv")
     qrels = pd.read_csv("dataset/eval/qrels.csv")
@@ -134,7 +136,6 @@ def main():
         qid = row.query_id
         qtext = row.query_text
         qtype = row.query_type
-        q_emb = query_embs[i]
     #^ Replace 16th Jan -for _, row in queries.iterrows():
     #     qid = row["query_id"]
     #     qtext = row["query_text"]
@@ -196,59 +197,105 @@ def main():
                         ndcg_at_k(ranked_ids, rel_dict, 5),
                         mrr(ranked_ids, relevant_set)))
 
-        # Ours semantic+emotion aware summaries retrieval (NO LABEL LEAKAGE)
-        # Always derive emotion from the query text (never from gold labels / one-hot)
-        q_emotion = setl2_emotion_vector(qtext)
+        # 17th Jan Change Whole Our block
+        # A) If query_type == semantic -> semantic only (alpha=1.0)
+        # B) Two-stage: rerank only top CANDIDATE_K semantic candidates with emotion fusion
 
-        idx, _, _, _ = emotion_aware_retrieval_cached(
-            q_emb=q_emb,
-            doc_embs=aware_doc_embs,
-            doc_emotions=aware_emotions,
-            query_emotion=q_emotion,
-            alpha=alpha,
-            top_k=len(aware_summaries)
-        )
+        # Stage-1: semantic ranking on current index texts (FAST)
+        sem_sims_all = index_doc_embs @ q_emb
+        sem_ranked_all = np.argsort(sem_sims_all)[::-1].tolist()
 
-        #16th Jan Replace with cached version above
-        # idx, _, _, _ = emotion_aware_retrieval(
-        #     qtext,
-        #     aware_summaries,
-        #     aware_emotions,
-        #     q_emotion,
-        #     alpha=alpha,
-        #     top_k=len(aware_summaries)
-        # )
+        # Candidate set (top-K from semantic)
+        cand = sem_ranked_all[:min(CANDIDATE_K, len(sem_ranked_all))]
 
-        #15th Jan REMOVE 
-        # if qtype == "emotion":
-        #     # parse label from: "a <emotion> experience"
-        #     emo = str(qtext).lower().replace("a ", "").replace(" experience", "").strip()
-        #     q_vec = onehot(emo, label2i)
+        if qtype == "semantic":
+            # A) semantic queries: do NOT inject emotion (prevents emotion noise)
+            idx = sem_ranked_all
+        else:
+            # emotion_intent queries: apply fusion only within candidate set
+            q_emotion = setl2_emotion_vector(qtext)
 
-        #     idx, _, _, _ = emotion_aware_retrieval_vec(
-        #         qtext,
-        #         aware_summaries,
-        #         doc_label_vecs,
-        #         q_vec,
-        #         alpha=alpha, #According to multiple alpha values change
-        #         top_k=len(aware_summaries)
-        #     )
-        # else:
-        #     # semantic queries: keep your original NRC8-based emotion aware retrieval (or semantic-only)
-        #     q_emotion = setl2_emotion_vector(qtext)
-        #     idx, _, _, _ = emotion_aware_retrieval(
-        #         qtext,
-        #         aware_summaries,
-        #         aware_emotions,
-        #         q_emotion,
-        #         alpha=alpha, #According to multiple alpha values change
-        #         top_k=len(aware_summaries)
-        #     )
+            # build candidate-only arrays
+            cand_doc_embs = index_doc_embs[cand]
+            cand_doc_emotions = [aware_emotions[j] for j in cand]
+
+            # fusion only within candidates (top_k = len(cand))
+            cand_ranked, _, _, _ = emotion_aware_retrieval_cached(
+                q_emb=q_emb,
+                doc_embs=cand_doc_embs,
+                doc_emotions=cand_doc_emotions,
+                query_emotion=q_emotion,
+                alpha=alpha,
+                top_k=len(cand)
+            )
+
+            # cand_ranked contains indices 0..len(cand)-1, map back to original doc ids
+            reranked_cand = [cand[j] for j in cand_ranked]
+
+            # final list: reranked candidates first + the rest (keeps full ranking length)
+            rest = [x for x in sem_ranked_all if x not in set(cand)]
+            idx = reranked_cand + rest
+
         ranked_ids = [story_ids[i] for i in idx]
-        results.append((f"Ours_Sem+Emo_awareSum", qid, qtype,
+        results.append((f"Ours_Sem+Emo_{index_mode}", qid, qtype,
                         precision_at_k(ranked_ids, relevant_set, 5),
                         ndcg_at_k(ranked_ids, rel_dict, 5),
                         mrr(ranked_ids, relevant_set)))
+
+        # ^^^ Added above # Ours semantic+emotion aware summaries retrieval (NO LABEL LEAKAGE)
+        # # Always derive emotion from the query text (never from gold labels / one-hot)
+        # # Ours: semantic from index_doc_embs (depends on index_mode) + emotion from aware_emotions
+        # q_emotion = setl2_emotion_vector(qtext)
+
+        # idx, _, _, _ = emotion_aware_retrieval_cached(
+        #     q_emb=q_emb,
+        #     doc_embs=index_doc_embs,       #<-- 17th Jan CHANGE:use index embeddings not - aware_doc_embs,
+        #     doc_emotions=aware_emotions,
+        #     query_emotion=q_emotion,
+        #     alpha=alpha,
+        #     top_k=len(index_texts)
+        # )
+
+        # #16th Jan Replace with cached version above
+        # # idx, _, _, _ = emotion_aware_retrieval(
+        # #     qtext,
+        # #     aware_summaries,
+        # #     aware_emotions,
+        # #     q_emotion,
+        # #     alpha=alpha,
+        # #     top_k=len(aware_summaries)
+        # # )
+
+        # #15th Jan REMOVE 
+        # # if qtype == "emotion":
+        # #     # parse label from: "a <emotion> experience"
+        # #     emo = str(qtext).lower().replace("a ", "").replace(" experience", "").strip()
+        # #     q_vec = onehot(emo, label2i)
+
+        # #     idx, _, _, _ = emotion_aware_retrieval_vec(
+        # #         qtext,
+        # #         aware_summaries,
+        # #         doc_label_vecs,
+        # #         q_vec,
+        # #         alpha=alpha, #According to multiple alpha values change
+        # #         top_k=len(aware_summaries)
+        # #     )
+        # # else:
+        # #     # semantic queries: keep your original NRC8-based emotion aware retrieval (or semantic-only)
+        # #     q_emotion = setl2_emotion_vector(qtext)
+        # #     idx, _, _, _ = emotion_aware_retrieval(
+        # #         qtext,
+        # #         aware_summaries,
+        # #         aware_emotions,
+        # #         q_emotion,
+        # #         alpha=alpha, #According to multiple alpha values change
+        # #         top_k=len(aware_summaries)
+        # #     )
+        # ranked_ids = [story_ids[i] for i in idx]
+        # results.append((f"Ours_Sem+Emo_{index_mode}", qid, qtype,
+        #                 precision_at_k(ranked_ids, relevant_set, 5),
+        #                 ndcg_at_k(ranked_ids, rel_dict, 5),
+        #                 mrr(ranked_ids, relevant_set)))
 
     df = pd.DataFrame(results, columns=["system", "query_id", "query_type", "P@5", "nDCG@5", "MRR"])
 
