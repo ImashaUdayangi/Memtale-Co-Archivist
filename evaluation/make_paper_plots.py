@@ -3,20 +3,25 @@ from pathlib import Path
 import pandas as pd
 import matplotlib.pyplot as plt
 
-
 RUNS_DIR = Path("evaluation/runs")
-OUT_DIR = Path("evaluation/figures")
+OUT_DIR = Path("evaluation/figures_2")
 OUT_DIR.mkdir(parents=True, exist_ok=True)
 
+BEST_ALPHA = 0.9
+ALPHA_SWEEP_INDEX = "sit_aware"   # where your alpha sweep was run
+TARGET_QUERY_TYPE = "emotion_intent"
 
-def load_alpha_runs():
+
+def load_alpha_runs(index_mode: str = ALPHA_SWEEP_INDEX):
     """
-    Supports BOTH folder styles you used:
-      A) evaluation/runs/alpha_0.5/summary_by_type.csv
-      B) evaluation/runs/index_full/alpha_0.8/summary_by_type.csv  (we will ignore these for the alpha sweep)
+    Loads alpha sweep from:
+      evaluation/runs/index_{index_mode}/alpha_0.5/summary_by_type.csv
+    Extracts Ours row for query_type = emotion_intent
     """
     rows = []
-    for p in RUNS_DIR.glob("alpha_*/summary_by_type.csv"):
+    base = RUNS_DIR / f"index_{index_mode}"
+
+    for p in base.glob("alpha_*/summary_by_type.csv"):
         alpha_str = p.parent.name.replace("alpha_", "")
         try:
             alpha = float(alpha_str)
@@ -24,8 +29,11 @@ def load_alpha_runs():
             continue
 
         df = pd.read_csv(p)
-        # keep only Ours + emotion row
-        hit = df[(df["system"] == "Ours_Sem+Emo_awareSum") & (df["query_type"] == "emotion")]
+
+        # Ours system name depends on index: Ours_Sem+Emo_sit_aware etc.
+        ours_name = f"Ours_Sem+Emo_{index_mode}"
+
+        hit = df[(df["system"] == ours_name) & (df["query_type"] == TARGET_QUERY_TYPE)]
         if len(hit) == 0:
             continue
 
@@ -40,31 +48,30 @@ def load_alpha_runs():
     return out
 
 
-def plot_alpha_ndcg(alpha_df: pd.DataFrame):
+def plot_alpha_ndcg(alpha_df: pd.DataFrame, index_mode: str = ALPHA_SWEEP_INDEX):
     if alpha_df.empty:
-        print("No alpha sweep runs found in evaluation/runs/alpha_*/summary_by_type.csv")
+        print("No alpha sweep runs found.")
         return
 
     plt.figure()
     plt.plot(alpha_df["alpha"], alpha_df["nDCG@5"], marker="o")
     plt.xlabel("alpha")
-    plt.ylabel("nDCG@5 (emotion queries) — Ours")
-    plt.title("Sensitivity to alpha (Emotion Retrieval)")
+    plt.ylabel(f"nDCG@5 ({TARGET_QUERY_TYPE}) — Ours")
+    plt.title(f"Alpha sensitivity (index={index_mode})")
     plt.grid(True)
 
-    out_path = OUT_DIR / "alpha_vs_ndcg_emotion.png"
+    out_path = OUT_DIR / f"alpha_vs_ndcg_{TARGET_QUERY_TYPE}_index_{index_mode}.png"
     plt.savefig(out_path, dpi=200, bbox_inches="tight")
     plt.close()
     print("Saved:", out_path)
 
 
-def load_index_table(alpha: float = 0.8):
+def load_index_table(alpha: float = BEST_ALPHA):
     """
     Reads:
-      evaluation/runs/index_full/alpha_0.8/summary_overall.csv
-      evaluation/runs/index_aware/alpha_0.8/summary_overall.csv
-      evaluation/runs/index_sit_aware/alpha_0.8/summary_overall.csv
-    Returns a combined table.
+      evaluation/runs/index_full/alpha_0.9/summary_overall.csv
+      evaluation/runs/index_aware/alpha_0.9/summary_overall.csv
+      evaluation/runs/index_sit_aware/alpha_0.9/summary_overall.csv
     """
     indices = ["full", "aware", "sit_aware"]
     all_rows = []
@@ -83,18 +90,15 @@ def load_index_table(alpha: float = 0.8):
         return pd.DataFrame()
 
     table = pd.concat(all_rows, ignore_index=True)
-
-    # reorder columns nicely
     table = table[["index_mode", "system", "P@5", "nDCG@5", "MRR"]]
     return table
 
 
-def save_best_systems_table(table: pd.DataFrame):
+def save_best_systems_table(table: pd.DataFrame, alpha: float = BEST_ALPHA):
     if table.empty:
         print("No index tables found.")
         return
 
-    # Best by nDCG@5 per index
     best = (
         table.sort_values(["index_mode", "nDCG@5"], ascending=[True, False])
              .groupby("index_mode", as_index=False)
@@ -102,35 +106,40 @@ def save_best_systems_table(table: pd.DataFrame):
              .reset_index(drop=True)
     )
 
-    out_all = OUT_DIR / "table_alpha0.8_all_systems_by_index.csv"
-    out_best = OUT_DIR / "table_alpha0.8_best_system_by_index.csv"
+    out_all = OUT_DIR / f"table_alpha{alpha}_all_systems_by_index.csv"
+    out_best = OUT_DIR / f"table_alpha{alpha}_best_system_by_index.csv"
     table.to_csv(out_all, index=False)
     best.to_csv(out_best, index=False)
 
     print("Saved:", out_all)
     print("Saved:", out_best)
 
-    # Also print best table to terminal
-    print("\n=== Best system by index (alpha=0.8) ===")
+    print(f"\n=== Best system by index (alpha={alpha}) ===")
     print(best.to_string(index=False))
 
 
-def plot_index_comparison_emotion(alpha: float = 0.8):
+def plot_index_comparison_emotion(alpha: float = BEST_ALPHA):
     """
-    Optional Plot 2:
-    Bar chart: emotion nDCG@5 for selected systems across indices.
+    Bar chart: emotion_intent nDCG@5 for key systems across indices.
     """
     indices = ["full", "aware", "sit_aware"]
-    systems_to_show = ["B2_Sem_full", "B4_RRF_BM25+SBERT", "Ours_Sem+Emo_awareSum"]
 
     rows = []
     for idx in indices:
         p = RUNS_DIR / f"index_{idx}" / f"alpha_{alpha}" / "summary_by_type.csv"
         if not p.exists():
             continue
+
         df = pd.read_csv(p)
-        df = df[df["query_type"] == "emotion"]
-        df = df[df["system"].isin(systems_to_show)]
+        df = df[df["query_type"] == TARGET_QUERY_TYPE].copy()
+
+        # Keep only these three systems for each index
+        keep = {
+            f"B2_Sem_{idx}",
+            f"B4_RRF_{idx}",
+            f"Ours_Sem+Emo_{idx}",
+        }
+        df = df[df["system"].isin(keep)]
         df["index_mode"] = idx
         rows.append(df)
 
@@ -140,36 +149,36 @@ def plot_index_comparison_emotion(alpha: float = 0.8):
 
     data = pd.concat(rows, ignore_index=True)
 
-    # pivot to: index_mode x system values
     pivot = data.pivot(index="index_mode", columns="system", values="nDCG@5").reindex(indices)
 
     plt.figure()
     pivot.plot(kind="bar")
     plt.xlabel("Indexing strategy")
-    plt.ylabel("nDCG@5 (emotion queries)")
-    plt.title(f"Indexing strategy comparison (alpha={alpha})")
+    plt.ylabel(f"nDCG@5 ({TARGET_QUERY_TYPE})")
+    plt.title(f"Index strategy comparison (alpha={alpha})")
     plt.grid(True, axis="y")
 
-    out_path = OUT_DIR / f"index_comparison_emotion_ndcg_alpha_{alpha}.png"
+    out_path = OUT_DIR / f"index_comparison_{TARGET_QUERY_TYPE}_ndcg_alpha_{alpha}.png"
     plt.savefig(out_path, dpi=200, bbox_inches="tight")
     plt.close()
     print("Saved:", out_path)
 
 
 def main():
-    # 4A Plot 1: nDCG@5 vs alpha (ours + emotion queries)
-    alpha_df = load_alpha_runs()
+    # Plot 1: alpha sweep (ours only) for chosen index
+    alpha_df = load_alpha_runs(ALPHA_SWEEP_INDEX)
     if not alpha_df.empty:
-        alpha_df.to_csv(OUT_DIR / "alpha_sweep_ours_emotion.csv", index=False)
-        print("Saved:", OUT_DIR / "alpha_sweep_ours_emotion.csv")
-    plot_alpha_ndcg(alpha_df)
+        out_csv = OUT_DIR / f"alpha_sweep_ours_{TARGET_QUERY_TYPE}_index_{ALPHA_SWEEP_INDEX}.csv"
+        alpha_df.to_csv(out_csv, index=False)
+        print("Saved:", out_csv)
+    plot_alpha_ndcg(alpha_df, ALPHA_SWEEP_INDEX)
 
-    # 4B Table: alpha=0.8 for each index (full/aware/sit_aware)
-    table = load_index_table(alpha=0.8)
-    save_best_systems_table(table)
+    # Table: overall metrics by index for best alpha
+    table = load_index_table(alpha=BEST_ALPHA)
+    save_best_systems_table(table, alpha=BEST_ALPHA)
 
-    # Optional Plot 2: indexing comparison bars
-    plot_index_comparison_emotion(alpha=0.8)
+    # Plot 2: index comparison on emotion_intent
+    plot_index_comparison_emotion(alpha=BEST_ALPHA)
 
 
 if __name__ == "__main__":
