@@ -1,14 +1,22 @@
 # src/data_build_empathetic.py
 import pandas as pd
 from pathlib import Path
+import re
 
 IN_PATH = Path("dataset/raw/emotion-emotion_69k.csv")              # Kaggle file
 OUT_PATH = Path("dataset/raw/empathetic_stories.csv")  # output clean dataset
 
-TARGET_PER_EMOTION = 10     # ~10 per emotion
-MIN_WORDS = 200
+TARGET_TOTAL = 5000         # total stories target
+MIN_WORDS = 100
 MAX_WORDS = 600
 SOURCE_NAME = "EmpatheticDialogues_Kaggle"
+RANDOM_SEED = 42
+
+#15th Jan Removed as per 5000 record creation
+# TARGET_PER_EMOTION = 10     # ~10 per emotion
+# MIN_WORDS = 200
+# MAX_WORDS = 600
+# SOURCE_NAME = "EmpatheticDialogues_Kaggle"
 
 
 def _clean_text(x) -> str:
@@ -17,6 +25,19 @@ def _clean_text(x) -> str:
         return ""
     return str(x).replace("\n", " ").replace("\r", " ").strip()
 
+#15th jan Added function to strip speaker tags
+def _strip_speaker_tags(text: str) -> str:
+    """
+    Remove repeated speaker tags like 'Customer :' and 'Agent :' from dialogue text.
+    Also normalizes whitespace after removal.
+    """
+    if not text:
+        return ""
+    # remove variations like "Customer:" "Customer :" "Agent:" "Agent :"
+    text = re.sub(r"\b(Customer|Agent)\s*:\s*", "", text, flags=re.IGNORECASE)
+    # collapse multiple spaces
+    text = re.sub(r"\s+", " ", text).strip()
+    return text
 
 def main():
     # 1) Load
@@ -68,7 +89,10 @@ def main():
     grouped = grouped.rename(columns={"Situation": "situation", "emotion": "emotion_label"})
     grouped["source"] = SOURCE_NAME
 
-    # --- NEW: enforce Story length 200–600 words ---
+    # Remove 'Customer:' / 'Agent:' speaker tags from the merged story text #15th Jan Added
+    grouped["Story"] = grouped["Story"].apply(_strip_speaker_tags)
+
+    # --- NEW: enforce Story length 100–600 words ---
     def _word_count(t: str) -> int:
         return len((t or "").split())
 
@@ -82,18 +106,25 @@ def main():
     # drop short stories below MIN_WORDS
     grouped = grouped[grouped["Story"].apply(_word_count) >= MIN_WORDS].copy()
 
-    # 6) Balanced sampling: ~10 per emotion
-    emotions = sorted(grouped["emotion_label"].unique().tolist())
+    # 6) Sample a total of TARGET_TOTAL stories (keep natural emotion distribution)
+    if len(grouped) <= TARGET_TOTAL:
+        sampled = grouped.copy()
+    else:
+        sampled = grouped.sample(n=TARGET_TOTAL, random_state=RANDOM_SEED).reset_index(drop=True)
 
-    parts = []
-    for emo in emotions:
-        chunk = grouped[grouped["emotion_label"] == emo]
-        if len(chunk) <= TARGET_PER_EMOTION:
-            parts.append(chunk)
-        else:
-            parts.append(chunk.sample(n=TARGET_PER_EMOTION, random_state=42))
+    #15th Jan Removed as per 5000 record creation
+    # # 6) Balanced sampling: ~10 per emotion
+    # emotions = sorted(grouped["emotion_label"].unique().tolist())
 
-    sampled = pd.concat(parts, ignore_index=True).reset_index(drop=True)
+    # parts = []
+    # for emo in emotions:
+    #     chunk = grouped[grouped["emotion_label"] == emo]
+    #     if len(chunk) <= TARGET_PER_EMOTION:
+    #         parts.append(chunk)
+    #     else:
+    #         parts.append(chunk.sample(n=TARGET_PER_EMOTION, random_state=42))
+
+    # sampled = pd.concat(parts, ignore_index=True).reset_index(drop=True)
 
     # 7) Add story_id
     sampled.insert(0, "story_id", range(1, len(sampled) + 1))
@@ -106,10 +137,18 @@ def main():
     sampled.to_csv(OUT_PATH, index=False)
 
     print("✅ Saved:", OUT_PATH)
-    print("Rows:", len(sampled))
+    print("Rows:", len(sampled)) #15th Jan Added 
     print("Unique emotions:", sampled["emotion_label"].nunique())
-    print("Example emotions distribution (top 10):")
+    print("Emotion distribution (top 10):")
     print(sampled["emotion_label"].value_counts().head(10))
+    print("Emotion distribution (tail 10):")
+    print(sampled["emotion_label"].value_counts().tail(10))
+
+    #15th Jan Removed as per 5000 record creation
+    # print("Rows:", len(sampled))
+    # print("Unique emotions:", sampled["emotion_label"].nunique())
+    # print("Example emotions distribution (top 10):")
+    # print(sampled["emotion_label"].value_counts().head(10))
 
 
 if __name__ == "__main__":

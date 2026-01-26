@@ -1,101 +1,201 @@
 query_id,query_text,query_type
-q1,I can start to see my mother showing early signs of dementia.,semantic
-q2,a caring experience,emotion
-q3,Once. I met this beautiful girl and she chose my best friend,semantic
-q4,a jealous experience,emotion
-q5,I was sitting in class and people talking behind me made me,semantic
-q6,a annoyed experience,emotion
-q7,I went to Greece and was amazed by all the beautiful landscape,semantic
-q8,a impressed experience,emotion
-q9,Once I was staying at a friends house and a really bad,semantic
-q10,a afraid experience,emotion
-q11,"My mom, who's in her 60s, lost her best friend today, who",semantic
-q12,a devastated experience,emotion
-q13,Mom bought me groceries once,semantic
-q14,a grateful experience,emotion
-q15,I told my husband that I was going to see a friend,semantic
-q16,a guilty experience,emotion
-q17,"I blamed my oldest son for losing my headphones, but it turns",semantic
-q18,a ashamed experience,emotion
-q19,"I was disappointed with the new Mario Tennis game, it did not",semantic
-q20,a disappointed experience,emotion
-q21,I found the baby braclet they put on my father when he,semantic
-q22,a sentimental experience,emotion
-q23,I love my kids so much. I want them to live with,semantic
-q24,a caring experience,emotion
-q25,My cat sat on my bag right after she came out of,semantic
-q26,a furious experience,emotion
-q27,"Scratched someone's car in the parking lot today, bumped it a little",semantic
-q28,a grateful experience,emotion
-q29,My brother got a full ride to college due to my dad,semantic
-q30,a jealous experience,emotion
-q31,I'm 99% positive I can handle myself in a street fight. I've,semantic
-q32,a confident experience,emotion
-q33,I feel guilty for smoking in the house today when it was,semantic
-q34,a guilty experience,emotion
-q35,My son ran out without his pants on at a party. I,semantic
-q36,a embarrassed experience,emotion
-q37,I lost a job I had for many years. I wasn't sure,semantic
-q38,a trusting experience,emotion
-q39,I just moved to a new city for a new job and,semantic
-q40,a lonely experience,emotion
-q41,I went to a piano recital the other day and watched all,semantic
-q42,a impressed experience,emotion
-q43,My husband went out of town for the weekend and I stayed,semantic
-q44,a grateful experience,emotion
-q45,i bought cbd oil in hopes my anxiety would go away,semantic
-q46,a hopeful experience,emotion
-q47,When i left my money on the bus,semantic
-q48,a devastated experience,emotion
-q49,"I have a hard time eating, I am allergic to so much!",semantic
-q50,a anxious experience,emotion
-q51,I did not get the promotion I wanted,semantic
-q52,a disappointed experience,emotion
-q53,My state sent me a tax bill for my newly opened business,semantic
-q54,a surprised experience,emotion
-q55,"Shortly after I got married, my wife and I decided that we",semantic
-q56,a anticipating experience,emotion
-q57,My best friend left me alone at the bar while I was,semantic
-q58,a disappointed experience,emotion
-q59,I'm in school right now and unable to pay for much since,semantic
-q60,a guilty experience,emotion
-q61,I tried escargot this summer on a cruise. I don't know why,semantic
-q62,a disgusted experience,emotion
-q63,I took a flight last week and there was awful turbulence. It,semantic
-q64,a afraid experience,emotion
-q65,I was going to a vacation house that is far from the,semantic
-q66,a furious experience,emotion
-q67,My son said his first word today. I was filled with pride.,semantic
-q68,a proud experience,emotion
-q69,I am starting my first year of college and I am so,semantic
-q70,a terrified experience,emotion
-q71,I found a stray kitten outside the pizza place the other day.,semantic
-q72,a caring experience,emotion
-q73,My mom is doing her best to put me through college on,semantic
-q74,a grateful experience,emotion
-q75,My daughter didnt have a good first year at her new school.,semantic
-q76,a hopeful experience,emotion
-q77,I couldn't get into my car in the parking lot the other,semantic
-q78,a embarrassed experience,emotion
-q79,I told my son not to drink near my computer and he,semantic
-q80,a furious experience,emotion
-q81,"I have an irrational fear of flying, yet I planned a trip",semantic
-q82,a afraid experience,emotion
-q83,I am going on a vacation soon and can not wait.,semantic
-q84,a excited experience,emotion
-q85,My grandma passed away earlier this year. We used to always get,semantic
-q86,a sentimental experience,emotion
-q87,"I get sentimental about my brothers, they are very important to me",semantic
-q88,a sentimental experience,emotion
-q89,My husband took a 30 hour round trip road trip and will,semantic
-q90,a anxious experience,emotion
-q91,I am not sure my son is going to do well in,semantic
-q92,a afraid experience,emotion
-q93,"I remember when I bought my first car, it feels just like",semantic
-q94,a excited experience,emotion
-q95,"As a child, my parents would take us on a big road",semantic
-q96,a nostalgic experience,emotion
-q97,My brother is starting his first semester at the college I wanted,semantic
-q98,a joyful experience,emotion
-q99,I didn't do well in Viology this year. Im gonna kill it,semantic
-q100,a confident experience,emotion
+q1,There is a storm approaching my house. I am ready for it,semantic
+q2,I get so annoyed at my husband when he leaves his dirty,semantic
+q3,My grandma passed away earlier this year. We used to always get,semantic
+q4,I was disappointed in others for passing a dog up that needed,semantic
+q5,My wife has out of town for a couple weeks and we,semantic
+q6,I lost my dog a few days ago. It was really sudden.,semantic
+q7,My husband had meningitis and then got bells palsey. I was very,semantic
+q8,I came outside yesterday to discover a baby bird on the ground,semantic
+q9,I ran a red light this morning,semantic
+q10,I was in McDonald's drive thru to place my food order. When,semantic
+q11,So I was at a friends house and our kids were running,semantic
+q12,"I think everyday how fortunate I am to have a house, car,",semantic
+q13,These contractors are fixing the roof and they are so messy,semantic
+q14,I am going back to school. I never thought I would. I,semantic
+q15,I sold my first painting last month. I have been working on,semantic
+q16,I did a Mud Run last week and had so much fun,semantic
+q17,There are times when I wish I could I had not sold,semantic
+q18,I feel excited that the new footbal season is about to start.,semantic
+q19,I was really upset when I watched the final episode of the,semantic
+q20,I still have every little craft mu kids have ever made. I,semantic
+q21,"I asked my brother to change my oil over a month ago,",semantic
+q22,I went through a serious bout of insomnia about two years ago,semantic
+q23,I spent some time today going through old photos. Reminds me of,semantic
+q24,Was walking down the street yesterday and some little twerp ran his,semantic
+q25,I volunteer at a local animal rescue. We get some dogs in,semantic
+q26,I was proud of a pizza I made yesterday,semantic
+q27,Once my wife went with her family to the beach and left,semantic
+q28,it is always a happiness to experience more than what we expected..,semantic
+q29,"My friend had two dogs. When she moved for a job, she",semantic
+q30,My fence is collapsing at areas where my neighbors keep climbing over,semantic
+q31,A dog chased after me while I was running with my baby,semantic
+q32,I just learned that I field my final exam. I was planning,semantic
+q33,I left most of my belongings at a hostel for 2 months.,semantic
+q34,Tomorrow I have to give a presentation at work and I just,semantic
+q35,I've always tried to have faith in my family.,semantic
+q36,My daughter was thrown from her horse a few months back. We,semantic
+q37,I'm pretty stoked for the release of my EP. I'm sitting on,semantic
+q38,Found my old nes system,semantic
+q39,I was sad at how mad I got at my mom when,semantic
+q40,I care about most poor people. But I have more sympathy for,semantic
+q41,I'm so upset that people don't understand what I'm saying.,semantic
+q42,My daughter applied for an internship over the summer all on her,semantic
+q43,I watched a documentary about puppy mills and and organization getting them,semantic
+q44,I found out a friend of mine from high school passed away.,semantic
+q45,I farted in front of a pretty girl,semantic
+q46,just got out of work to my friend sending me a message,semantic
+q47,I was devastated when my wife filled for divorce 2 years ago.,semantic
+q48,"I moved recently for work, but am having trouble meeting new friends",semantic
+q49,"I will finally be getting a new phone soon, and I can't",semantic
+q50,I have a friend who was constantly calling me last night attempting,semantic
+q51,I'm so happy i found a new job! we've been struggling financially,semantic
+q52,I went into my garage the other day and there was a,semantic
+q53,I watched the new Black Panther movie last night. I was a,semantic
+q54,I really hate going in front of crowds. Especially when I had,semantic
+q55,Everytime my cats run out of food I have to repeat to,semantic
+q56,Last night someone broke into my car. They stole all my change,semantic
+q57,I shouldn't have left work early today but I was feeling super,semantic
+q58,There was a turtle in my yard one day just panting and,semantic
+q59,We had a group meeting at work and there was some leftover,semantic
+q60,I am feeling trepidatious about payday this week. I don't now if,semantic
+q61,I keep seeing a poor little black kitty running around outside every,semantic
+q62,Seeing my old friend and talking about old basketball games we used,semantic
+q63,"The internet is failing a lot, I feel bad about that.",semantic
+q64,"On the way home on my bike, I couldn't hold it in",semantic
+q65,Going up to Pikes Peak in a few weeks for the first,semantic
+q66,"I feel bad when i lie to my parents, even though I",semantic
+q67,"For some reason, when I hear the song ""Walking In Memphis"" I",semantic
+q68,I was afraud ny son wasn't going to be able to talk,semantic
+q69,I just got back from a three month trip. I am really,semantic
+q70,I invested in cryptocurrency last year but the market is looking pretty,semantic
+q71,I've been practicing a new song an i know I am ready,semantic
+q72,"I'm disappointed in my new car, it has already broken down twice",semantic
+q73,I found a hair in my food while eating dinner last night.,semantic
+q74,Looking forward to getting my cats a new cat tree tomorrow! It,semantic
+q75,"Whenever I leave my children with my parents, I feel I do",semantic
+q76,I have been with my car insurance company for 30 years.,semantic
+q77,I am in such a good mood. I am going on vacation,semantic
+q78,My dog just died. I'm in shock.,semantic
+q79,I found an old R/C car I had from when I was,semantic
+q80,My husband and I went out to a real nice restaurant for,semantic
+q81,"I went to the candy store near me for the first time,",semantic
+q82,We were going on a week vacation. I got all the clothing,semantic
+q83,I had a long paper due for school last week. I didn't,semantic
+q84,"My wife just confessed that she cheated, im irritated at her behaviour",semantic
+q85,I saw that my coworker left food in the fridge and hat,semantic
+q86,"No matter how sad or hopeless I feel at times, there's no",semantic
+q87,I got fired from my job once. I had to ask my,semantic
+q88,Seeing that you bought a white color when I asked you to,semantic
+q89,When I choice to finally divorce my husband I had no place,semantic
+q90,"These days I've been feeling a little isolated, especially since I broke",semantic
+q91,turns out my best bro has a crush on MY crush. and,semantic
+q92,My friend just got the promotion that I really wanted and she,semantic
+q93,These mosquitos keep biting me no matter what I do. I've tried,semantic
+q94,I just bought my first house. I get to move in next,semantic
+q95,I gambled away a large chunk of money my grandmother left to,semantic
+q96,I applied for a job and thought I was going to get,semantic
+q97,I am so excited because I am starting a new job next,semantic
+q98,My oldest daughter had a hard time in school. She struggled with,semantic
+q99,I ran across a snake it our backyard. I shocked me.,semantic
+q100,I was in charge of the turkey during our last thanksgiving. I,semantic
+q101,"a memory about feeling calm, satisfied, and at peace with how things were. Context I watched a movie that I didn't really",emotion_intent
+q102,a memory about waiting for something important and feeling on edge. Context I can't wait till the weekend! I'm going,emotion_intent
+q103,"a memory about feeling anxious and unsafe, like something bad might happen. Context A wasp was in my room this morning.",emotion_intent
+q104,"a memory about feeling anxious and unsafe, like something bad might happen. Context Wasn't able to register for one of the",emotion_intent
+q105,"a memory about feeling down and hurt, like you lost something important. Context when it was my dads anniversary of death",emotion_intent
+q106,"a memory about feeling calm, satisfied, and at peace with how things were. Context Spur of the moment, my sister and I",emotion_intent
+q107,a memory about feeling thrilled and full of energy about something new. Context I can't wait until Halloween. I love scaring,emotion_intent
+q108,"a memory about intense fear, like you were in real danger. Context Last week someone broke in my house and",emotion_intent
+q109,a memory about intense anger and wanting to react strongly. Context I'm a pretty level-headed driver. But my one,emotion_intent
+q110,a memory about feeling ready and organized for something important. Context I was going on vacation. I planned out,emotion_intent
+q111,a memory about relying on someone and believing they would support you. Context I took my boots off after a long,emotion_intent
+q112,a memory about looking back warmly on the past and missing it. Context I remember a time when I actually had,emotion_intent
+q113,"a memory about being uncertain and nervous about what was coming next. Context My wife wants to have kids, but I'm",emotion_intent
+q114,"a memory about feeling ready and organized for something important. Context Last week, I had to give a speech.",emotion_intent
+q115,"a memory about feeling alone or unsupported, even around other people. Context You ever feel like you are the only",emotion_intent
+q116,a memory about worrying a lot and not being able to relax. Context A couple years ago where I live we,emotion_intent
+q117,a memory about feeling accomplished after hard work paid off. Context I was video chatting with my grandmother the,emotion_intent
+q118,"a memory about feeling calm, satisfied, and at peace with how things were. Context I just had a pretty good meal at",emotion_intent
+q119,a memory about feeling strongly uncomfortable with something unpleasant. Context At work I have to take out the,emotion_intent
+q120,a memory about relying on someone and believing they would support you. Context I like my new manager. He is so,emotion_intent
+q121,a memory about feeling happy and uplifted by a positive moment. Context A few weeks ago I went to a,emotion_intent
+q122,a memory about feeling thrilled and full of energy about something new. Context I published my first research paper and it,emotion_intent
+q123,"a memory about feeling calm, satisfied, and at peace with how things were. Context I had a meal at Whataburger yesterday. I",emotion_intent
+q124,"a memory about feeling awkward after a mistake in front of others. Context When I was a preteen, my parents and",emotion_intent
+q125,"a memory about feeling anxious and unsafe, like something bad might happen. Context I woke up in the middle of the",emotion_intent
+q126,a memory about waiting for something important and feeling on edge. Context I cant wait till I save enough money,emotion_intent
+q127,a memory about appreciating someone’s help or kindness. Context I am so happy all of my kids,emotion_intent
+q128,a memory about something unexpected that changed how you felt. Context Came home tonight and there was an owl,emotion_intent
+q129,a memory about feeling thrilled and full of energy about something new. Context I am so looking forward to the next,emotion_intent
+q130,a memory about waiting for something important and feeling on edge. Context The other evening watching the World Cup soccer,emotion_intent
+q131,"a memory about looking back warmly on the past and missing it. Context Every time my best friend comes in town,",emotion_intent
+q132,a memory about staying loyal and committed even when things were difficult. Context A friend of mine is going through a,emotion_intent
+q133,"a memory about feeling calm, satisfied, and at peace with how things were. Context The sun is shining adn have no plans",emotion_intent
+q134,a memory about intense anger and wanting to react strongly. Context I cant believe someone let my dog out,emotion_intent
+q135,a memory about feeling accomplished after hard work paid off. Context My daughter used the potty for her first,emotion_intent
+q136,a memory about relying on someone and believing they would support you. Context I'm planning a birthday party for my mom,emotion_intent
+q137,"a memory about believing things could improve despite challenges. Context I am looking forward to Christmas, I would",emotion_intent
+q138,a memory about relying on someone and believing they would support you. Context I had just gotten out of a bad,emotion_intent
+q139,a memory about admiring someone’s skills or a surprising achievement. Context My wife has really stepped up her cooking,emotion_intent
+q140,a memory about regretting something and wishing you could undo it. Context I took something from a boyfriend's house without,emotion_intent
+q141,a memory about regretting something and wishing you could undo it. Context i took my son to the park yesterday,emotion_intent
+q142,a memory about waiting for something important and feeling on edge. Context I'm gone vegetarian for over a year now.,emotion_intent
+q143,a memory about feeling embarrassed and regretting something you did. Context I remember a time where I was asked,emotion_intent
+q144,a memory about regretting something and wishing you could undo it. Context One time I skipped out on a family,emotion_intent
+q145,a memory about intense anger and wanting to react strongly. Context Dog ruined my curtains,emotion_intent
+q146,a memory about feeling furious after being treated unfairly or disrespected. Context i get so frustrated with my slacker coworker,emotion_intent
+q147,"a memory about feeling calm, satisfied, and at peace with how things were. Context This weekend was very stressful at work, but",emotion_intent
+q148,a memory about feeling happy and uplifted by a positive moment. Context My sister just had a baby two days,emotion_intent
+q149,"a memory about feeling calm, satisfied, and at peace with how things were. Context Can't complain about anything. I have a roof",emotion_intent
+q150,a memory about being uncertain and nervous about what was coming next. Context When my daughter told me she had news,emotion_intent
+q151,a memory about appreciating someone’s help or kindness. Context I was driving on the freeway the other,emotion_intent
+q152,a memory about admiring someone’s skills or a surprising achievement. Context I went to see the great pyramids recently,emotion_intent
+q153,a memory about intense anger and wanting to react strongly. Context I cant find my debit card. I think,emotion_intent
+q154,a memory about feeling happy and uplifted by a positive moment. Context My birthday is soon!,emotion_intent
+q155,a memory about regretting something and wishing you could undo it. Context My wife asked me to clean the house,emotion_intent
+q156,a memory about feeling strongly uncomfortable with something unpleasant. Context I was at a bus station and a,emotion_intent
+q157,a memory about feeling accomplished after hard work paid off. Context I received an excellent grade on an exam,emotion_intent
+q158,"a memory about staying loyal and committed even when things were difficult. Context My work laptop just recently crashed. However, I'm",emotion_intent
+q159,a memory about being irritated by something small that kept happening. Context I was at the post officer yesterday and,emotion_intent
+q160,a memory about feeling strongly uncomfortable with something unpleasant. Context I remember the first I got pooped on,emotion_intent
+q161,a memory about feeling strongly uncomfortable with something unpleasant. Context Have had this roommate for a year. Decided,emotion_intent
+q162,a memory about believing things could improve despite challenges. Context We moved to a new area and my,emotion_intent
+q163,"a memory about intense fear, like you were in real danger. Context I'm cooking diinner for my boyfriend tonight. Im",emotion_intent
+q164,a memory about something unexpected that changed how you felt. Context I found out that my wife is pregnant,emotion_intent
+q165,a memory about feeling let down when something didn’t work out. Context I was promised a cuddly bear from build,emotion_intent
+q166,a memory about feeling capable and sure you could handle the situation. Context I was playing the drums with my friend's,emotion_intent
+q167,"a memory about being irritated by something small that kept happening. Context I love the new apartment I moved into,",emotion_intent
+q168,a memory about feeling ready and organized for something important. Context My husband and I recently got a new,emotion_intent
+q169,"a memory about feeling awkward after a mistake in front of others. Context i was at the park with my son,",emotion_intent
+q170,a memory about believing things could improve despite challenges. Context I just found out that I'm pregnant. Its,emotion_intent
+q171,a memory about something unexpected that changed how you felt. Context I am surprised to see croatia went to,emotion_intent
+q172,a memory about intense anger and wanting to react strongly. Context My coworker blamed his bad work mistake on,emotion_intent
+q173,a memory about regretting something and wishing you could undo it. Context I feel bad about myself,emotion_intent
+q174,a memory about believing things could improve despite challenges. Context My mother recently applied for a much better,emotion_intent
+q175,a memory about feeling thrilled and full of energy about something new. Context I have a two week vacation coming out,emotion_intent
+q176,a memory about staying loyal and committed even when things were difficult. Context I'm very faithful in my community and the,emotion_intent
+q177,a memory about feeling awkward after a mistake in front of others. Context I once was at a high school football,emotion_intent
+q178,a memory about appreciating someone’s help or kindness. Context I received a full ride scholarship to my,emotion_intent
+q179,a memory about feeling embarrassed and regretting something you did. Context Someone asked me for some money to donate,emotion_intent
+q180,a memory about looking back warmly on the past and missing it. Context When I think about a certain even with,emotion_intent
+q181,a memory about looking back warmly on the past and missing it. Context My mom is moving in with me and,emotion_intent
+q182,a memory about something unexpected that changed how you felt. Context I got a random box of diapers the,emotion_intent
+q183,a memory about feeling capable and sure you could handle the situation. Context I am so sure that I will be,emotion_intent
+q184,a memory about feeling capable and sure you could handle the situation. Context I have a major work evaluation tomorrow. I,emotion_intent
+q185,a memory about something unexpected that changed how you felt. Context I was riding my motorcycle when a car,emotion_intent
+q186,a memory about feeling accomplished after hard work paid off. Context My son graduated from high school and is,emotion_intent
+q187,a memory about admiring someone’s skills or a surprising achievement. Context Took an 8 hour flight and was pleasantly,emotion_intent
+q188,a memory about feeling accomplished after hard work paid off. Context My dad had a problem with drinking and,emotion_intent
+q189,a memory about regretting something and wishing you could undo it. Context I can't believe I lied to my friend,emotion_intent
+q190,a memory about being irritated by something small that kept happening. Context I have not been in the best mood,emotion_intent
+q191,a memory about intense anger and wanting to react strongly. Context I sent my daughter shopping for school clothes.,emotion_intent
+q192,a memory about feeling completely crushed after a big loss or setback. Context my kids gold fish died,emotion_intent
+q193,a memory about feeling completely crushed after a big loss or setback. Context I saw my girlfriend with another man.,emotion_intent
+q194,a memory about wanting what someone else had and feeling bothered by it. Context My sister went to the movie with my,emotion_intent
+q195,"a memory about feeling calm, satisfied, and at peace with how things were. Context I moved into a new house recently. And",emotion_intent
+q196,a memory about deep feelings tied to a meaningful person or moment. Context I was forced due to a family emergency,emotion_intent
+q197,"a memory about intense fear, like you were in real danger. Context Last month, I show a pedestrian in front",emotion_intent
+q198,"a memory about staying loyal and committed even when things were difficult. Context I don't know where my life is heading,",emotion_intent
+q199,a memory about feeling let down when something didn’t work out. Context I'm pretty laid back. The only time I'll,emotion_intent
+q200,a memory about feeling strongly uncomfortable with something unpleasant. Context I fed my dog a new dog food,emotion_intent

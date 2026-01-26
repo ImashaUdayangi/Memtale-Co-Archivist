@@ -7,7 +7,7 @@ import pandas as pd
 from scipy.spatial.distance import jensenshannon
 from scipy.stats import wilcoxon
 
-from src.setl2 import setl2_emotion_vector
+from src.setl2 import setl2_emotion_vector, EMOTIONS
 
 
 def dict_to_vec(d: dict, keys: list[str]) -> np.ndarray:
@@ -34,7 +34,7 @@ def safe_prob(v: np.ndarray) -> np.ndarray:
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument("--out_dir", type=str, default="evaluation/figures",
+    parser.add_argument("--out_dir", type=str, default="evaluation/figures_2",
                         help="Where to save CSV outputs")
     args = parser.parse_args()
 
@@ -53,10 +53,13 @@ def main():
     naive_summaries = summaries["naive_summary"].fillna("").tolist()
     aware_summaries = summaries["aware_summary"].fillna("").tolist()
 
-    # Determine emotion key space from a few samples (stable)
-    # If your setl2 always returns same keys, this is safe.
-    sample_vec = setl2_emotion_vector("test")
-    keys = sorted(sample_vec.keys())
+    # # Determine emotion key space from a few samples (stable)
+    # # If your setl2 always returns same keys, this is safe.
+    # sample_vec = setl2_emotion_vector("test")
+    # keys = sorted(sample_vec.keys())
+
+    #^22nd Replaced
+    keys = EMOTIONS
 
     rows = []
     for sid, full, naive, aware in zip(story_ids, full_texts, naive_summaries, aware_summaries):
@@ -87,7 +90,23 @@ def main():
         })
 
     df = pd.DataFrame(rows)
+
+    # 22nd added - breakdown by gold emotion label if available
+    if "emotion_label" in stories.columns:
+        labels = stories.set_index("story_id").loc[story_ids]["emotion_label"].values
+        df["emotion_label"] = labels
+
+        by_emotion = df.groupby("emotion_label")[[
+            "cos(full,naive)", "cos(full,aware)",
+            "jsd(full,naive)", "jsd(full,aware)",
+            "cos_gain(aware-naive)", "jsd_gain(naive-aware)"
+        ]].mean().reset_index()
+
+        by_emotion.to_csv(out_dir / "emotional_fidelity_by_emotion.csv", index=False)
+
     df.to_csv(out_dir / "emotional_fidelity_per_story.csv", index=False)
+
+
 
     # aggregate
     summary = {
