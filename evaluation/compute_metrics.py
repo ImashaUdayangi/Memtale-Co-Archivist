@@ -54,7 +54,11 @@ for method, fname in run_files.items():
     mrrs = []
 
     for qid, group in run.groupby("query_id"):
+        if qid not in qrels_dict:
+            continue
+
         ranked_docs = group.sort_values("rank")["story_id"].astype(int).tolist()
+        ranked_docs = list(dict.fromkeys(ranked_docs))  # safety: drop duplicates, keep order
 
         ndcgs.append(ndcg_at_k_from_qrels(qid, ranked_docs, qrels_dict, k=5))
         mrrs.append(mrr_from_qrels(qid, ranked_docs, qrels_dict))
