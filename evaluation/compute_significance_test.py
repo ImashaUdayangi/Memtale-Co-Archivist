@@ -51,8 +51,10 @@ def wilcoxon_with_effect(x, y):
     x = np.asarray(x, dtype=float)
     y = np.asarray(y, dtype=float)
 
-    d = y - x  # improvement direction (y vs x)
-    d = d[~np.isnan(d)]
+    mask = ~np.isnan(x) & ~np.isnan(y)
+    x = x[mask]
+    y = y[mask]
+    d = y - x
 
     # remove zeros (wilcoxon ignores 0 diffs depending on zero_method; we remove to be explicit)
     d_nz = d[np.abs(d) > 1e-12]
