@@ -111,11 +111,17 @@ def summarize(per_query_df: pd.DataFrame, k: int, method_name: str) -> pd.DataFr
     """
     col = f"emo_fidelity@{k}"
 
-    overall = per_query_df[col].mean()
+    def safe_mean(x):
+        return float(np.mean(x)) if len(x) > 0 else np.nan
 
-    emo_intent = per_query_df[per_query_df["query_type"] == "emotion_intent"][col].mean()
-    non_emo = per_query_df[per_query_df["query_type"] != "emotion_intent"][col].mean()
+    overall = safe_mean(per_query_df[col].values)
 
+    emo_mask = per_query_df["query_type"] == "emotion_intent"
+    emo_intent = safe_mean(per_query_df.loc[emo_mask, col].values)
+
+    non_mask = ~emo_mask
+    non_emo = safe_mean(per_query_df.loc[non_mask, col].values)
+    
     return pd.DataFrame(
         [
             {"Method": method_name, "Subset": "overall", f"EmoFidelity@{k}": overall},
