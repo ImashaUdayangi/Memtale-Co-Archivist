@@ -8,7 +8,6 @@ EVAL_SUMMARY_PATH = os.path.join(RESULTS_DIR, "evaluation_summary.csv")
 EMO_SUMMARY_PATH = os.path.join(RESULTS_DIR, "emotional_fidelity_summary.csv")
 
 OUT_PNG = os.path.join(RESULTS_DIR, "main_results_bar_chart.png")
-OUT_PDF = os.path.join(RESULTS_DIR, "main_results_bar_chart.pdf")
 
 
 def normalize_method_name(m: str) -> str:
@@ -108,12 +107,10 @@ def main():
 
     plt.tight_layout()
     plt.savefig(OUT_PNG, dpi=300)
-    plt.savefig(OUT_PDF)
     plt.close()
 
     print("✅ Saved combined grouped bar chart:")
     print(f" - {OUT_PNG}")
-    print(f" - {OUT_PDF}")
     print("\nData used:")
     print(merged.to_string(index=False))
 
