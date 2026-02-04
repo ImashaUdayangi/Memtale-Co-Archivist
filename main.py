@@ -17,18 +17,18 @@ def require(path: str):
     if not p.exists():
         raise FileNotFoundError(
             f"\n Missing required file: {path}\n"
-            f"Fix: ensure you have generated it once (offline) and committed it for demo."
+            f"Fix: generate it first, or place it in the expected path."
         )
     return p
 
 def main():
-    parser = argparse.ArgumentParser(description="Memtale-Co-Archivist IPD Prototype Runner")
+    parser = argparse.ArgumentParser(description="Memtale-Co-Archivist Experiment Runner")
     parser.add_argument(
         "--mode",
-        choices=["demo", "rebuild"],
-        default="demo",
-        help="demo = run using frozen dataset/queries/qrels (recommended for viva). "
-             "rebuild = regenerate data/summaries/queries (NOT recommended for viva)."
+        choices=["run", "rebuild"],
+        default="run",
+        help="run = use existing artifacts (datasets/queries/qrels) to reproduce results. "
+             "rebuild = regenerate artifacts (includes manual judging step)."
     )
     args = parser.parse_args()
 
@@ -40,15 +40,15 @@ def main():
     # ---------------------------
     # REBUILD MODE (developer)
     if args.mode == "rebuild":
-        #  Rebuild pipeline (only for you, NOT for viva)
+        #  Rebuild pipeline
         run_module("src.data_build_empathetic")
         run_module("src.precompute_summaries")
         run_module("src.build_eval_queries_v3")
 
         # IMPORTANT: judging pool involves manual work.
-        # We generate it, but DO NOT proceed to qrels unless you already judged it.
         run_module("src.build_judging_pool_v3")
-        print("\n STOP: Now you must manually fill judging_pool_blind.csv (2/1/0).")
+        print("\n Manual step required:")
+        print("Fill judging_pool_blind.csv with relevance labels (2/1/0).")
         print("Then run: python -m src.convert_judged_to_qrels_v3\n")
         return
 
@@ -77,8 +77,8 @@ def main():
     run_module("evaluation.make_qualitative_rerank_example")
 
     # Quick “what to show” checklist
-    print("\n DEMO COMPLETED SUCCESSFULLY\n")
-    print("Show these files to the viva panel:")
+    print("\n PROTOTYPE COMPLETED SUCCESSFULLY\n")
+    print("Key outputs:")
     print(" - evaluation/results/evaluation_summary.csv")
     print(" - evaluation/results/main_results_bar_chart.png")
     print(" - evaluation/results/qualitative_rerank_example.csv\n")
