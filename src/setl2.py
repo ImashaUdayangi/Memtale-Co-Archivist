@@ -3,7 +3,7 @@
 SETL-2: Semantic–Emotional Tagging Layer (Interpretable)
 Combines lexicon-based emotion signals with sentiment polarity.
 """
-
+import numpy as np
 from nltk.sentiment.vader import SentimentIntensityAnalyzer
 from nrclex import NRCLex
 from collections import Counter
@@ -22,6 +22,14 @@ EMOTIONS = [
     "surprise",
     "anticipation"
 ]
+
+#1st Feb Added two-stage BM25 + SETL-2 reranking
+def setl2_vector_np(text: str) -> np.ndarray:
+    """
+    Returns SETL-2 vector as numpy array in fixed EMOTIONS order.
+    """
+    v = setl2_emotion_vector(text)
+    return np.array([v[e] for e in EMOTIONS], dtype=float)
 
 def vader_compound(text: str) -> float:
     """Return VADER compound sentiment score."""

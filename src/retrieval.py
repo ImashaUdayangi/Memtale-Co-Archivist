@@ -1,6 +1,7 @@
 # src/retrieval.py
 import numpy as np
 import re
+from typing import List, Dict, Tuple, Optional
 from rank_bm25 import BM25Okapi
 from sentence_transformers import SentenceTransformer
 
@@ -223,3 +224,83 @@ def emotion_aware_retrieval_cached(
     final = alpha * sem_sims + (1 - alpha) * emo_sims
     ranked = np.argsort(final)[::-1][:top_k]
     return ranked.tolist(), final[ranked].tolist(), sem_sims[ranked].tolist(), emo_sims[ranked].tolist()
+
+# -------------------------
+#1st Feb Added two-stage BM25 + SETL-2 reranking
+# -------------------------
+def minmax_norm(x: np.ndarray, eps: float = 1e-9) -> np.ndarray:
+    mn, mx = float(x.min()), float(x.max())
+    if (mx - mn) < eps:
+        return np.zeros_like(x, dtype=float)
+    return (x - mn) / (mx - mn)
+
+def cosine_sim_vec(a: np.ndarray, b: np.ndarray, eps: float = 1e-12) -> float:
+    na = np.linalg.norm(a)
+    nb = np.linalg.norm(b)
+    if na < eps or nb < eps:
+        return 0.0
+    return float((a / na) @ (b / nb))
+
+def two_stage_bm25_rerank_setl2(
+    query_text: str,
+    docs_text: List[str],
+    docs_emotion_vecs: np.ndarray,     # shape: (N, d)
+    query_emotion_vec: np.ndarray,     # shape: (d,)
+    bm25_top_k: int = 100,
+    final_top_k: int = 100,
+    query_type: str = "emotion_intent",
+    bm25_k1: float = 1.5,
+    bm25_b: float = 0.75,
+    bm25_index: BM25Okapi | None = None,
+):
+    """
+    Stage 1: BM25 over ALL docs -> topK candidates
+    Stage 2: rerank ONLY topK using:
+        - normalized BM25 score
+        - SBERT semantic similarity
+        - SETL-2 emotion cosine similarity
+
+    Adaptive weights:
+        emotion_intent -> more emotion weight
+        non_emotion_intent -> less emotion weight
+    """
+
+    # ---- Stage 1: BM25 ----
+    if bm25_index is None:
+        bm25_index = build_bm25_index(docs_text, k1=bm25_k1, b=bm25_b)
+
+    bm25_scores_all = bm25_rank(bm25_index, query_text)  # (N,)
+    cand_idx = np.argsort(bm25_scores_all)[::-1][:bm25_top_k]
+
+    # ---- Stage 2 features on candidates ----
+    # semantic sims (SBERT)
+    # (we compute embeddings only for candidate docs for speed)
+    cand_texts = [docs_text[i] for i in cand_idx]
+    cand_embs = embed_texts(cand_texts)          # (K, d)
+    q_emb = embed_texts([query_text])[0]         # (d,)
+    sem_sims = cand_embs @ q_emb                 # (K,)
+
+    # emotion sims (SETL-2)
+    # cosine between query_emotion_vec and each doc emotion vec
+    q_e = query_emotion_vec.astype(float)
+    emo_sims = np.array([cosine_sim_vec(docs_emotion_vecs[i].astype(float), q_e) for i in cand_idx])
+
+    # normalize bm25 within candidates
+    bm25_cand = bm25_scores_all[cand_idx]
+    bm25_norm = minmax_norm(bm25_cand)
+
+    # ---- Adaptive weights (rule-based expert system) ----
+    # (not tuned on test results; fixed rule = acceptable)
+    if str(query_type).lower() == "emotion_intent":
+        w_bm25, w_sem, w_emo = 0.30, 0.40, 0.30
+    else:
+        w_bm25, w_sem, w_emo = 0.50, 0.45, 0.05
+
+    # fused rerank score
+    fused = (w_bm25 * bm25_norm) + (w_sem * sem_sims) + (w_emo * emo_sims)
+
+    rerank_order = np.argsort(fused)[::-1]
+    reranked_idx = cand_idx[rerank_order][:final_top_k]
+
+    # also return scores for analysis if needed
+    return reranked_idx.tolist(), fused[rerank_order][:final_top_k].tolist()
