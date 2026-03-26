@@ -66,8 +66,8 @@ Memtale-Prototype/
 
 ### Create and activate a virtual environment
 ```powershell
-python -m venv venv
-.\venv\Scripts\Activate.ps1
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1
 
 ---
 
