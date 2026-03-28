@@ -14,7 +14,8 @@ RUN_PATHS = {
     "BM25": os.path.join(RUNS_DIR, "bm25_run.csv"),
     "SBERT": os.path.join(RUNS_DIR, "sbert_run.csv"),
     "RRF": os.path.join(RUNS_DIR, "rrf_run.csv"),
-    "OURS": os.path.join(RUNS_DIR, "ours_run.csv"),
+    "CE-Rerank": os.path.join(RUNS_DIR, "ce_run.csv"),
+    "OURS": os.path.join(RUNS_DIR, "wemo_0.20_run.csv"),   # ✅ final OURS
 }
 
 CORPUS_PATH = "dataset/raw/empathetic_stories.csv"  # story_id, emotion_label, Story, ...
@@ -35,8 +36,7 @@ def ndcg_at_k(rels, k):
     ideal = dcg_at_k(sorted(rels, reverse=True), k)
     return 0.0 if ideal == 0 else dcg / ideal
 
-def mrr_at_k(rels, k):
-    rels = rels[:k]
+def mrr(rels):
     for i, r in enumerate(rels, start=1):
         if r > 0:
             return 1.0 / i
@@ -147,7 +147,7 @@ for q in queries.itertuples(index=False):
         "target_emotion": target_em,
     }
 
-    for method in ["BM25", "SBERT", "RRF", "OURS"]:
+    for method in ["BM25", "SBERT", "RRF", "CE-Rerank", "OURS"]:
         df_run = runs[method]
         docs = df_run[df_run["query_id"] == qid]["story_id"].tolist()
 
@@ -155,7 +155,7 @@ for q in queries.itertuples(index=False):
         rels = [int(relmap.get(doc_id, 0)) for doc_id in docs]
 
         row_out[f"{method}_nDCG@{K_NDCG}"] = ndcg_at_k(rels, K_NDCG)
-        row_out[f"{method}_MRR"] = mrr_at_k(rels, k=len(rels))  # MRR usually over full list
+        row_out[f"{method}_MRR"] = mrr(rels)  # MRR usually over full list
 
         # Emotional fidelity@5: fraction of top-5 whose emotion equals target
         topk = docs[:K_EMO]
@@ -194,14 +194,18 @@ def add_test(metric_col, base_method, ours_method="OURS", label=None):
 add_test(f"nDCG@{K_NDCG}", "BM25", label="OURS vs BM25")
 add_test(f"nDCG@{K_NDCG}", "SBERT", label="OURS vs SBERT")
 add_test(f"nDCG@{K_NDCG}", "RRF",  label="OURS vs RRF")
+add_test(f"nDCG@{K_NDCG}", "CE-Rerank", label="OURS vs CE-Rerank")
 
 # MRR
 add_test("MRR", "BM25", label="OURS vs BM25")
 add_test("MRR", "SBERT", label="OURS vs SBERT")
 add_test("MRR", "RRF",  label="OURS vs RRF")
+add_test("MRR", "CE-Rerank", label="OURS vs CE-Rerank")
 
-# Emotional fidelity@5 (OURS vs BM25 only as you requested)
+# Emotional fidelity@5 (do against all key baselines now)
 add_test(f"EmoFidelity@{K_EMO}", "BM25", label="OURS vs BM25")
+add_test(f"EmoFidelity@{K_EMO}", "CE-Rerank", label="OURS vs CE-Rerank")
+add_test(f"EmoFidelity@{K_EMO}", "RRF", label="OURS vs RRF")
 
 summary = pd.DataFrame(tests)
 summary_out = os.path.join(RESULTS_DIR, "significance_summary.csv")
@@ -209,4 +213,4 @@ summary.to_csv(summary_out, index=False)
 
 print("\n=== Wilcoxon Signed-Rank Results ===")
 print(summary.to_string(index=False))
-print(f"\n✅ Saved significance summary: {summary_out}")
+print(f"\n Saved significance summary: {summary_out}")
