@@ -1,22 +1,31 @@
 import os
 import pandas as pd
 import numpy as np
+from pathlib import Path
 
 # ---------------- CONFIG ----------------
 DATASET_DIR = "dataset/eval_v3"
 CORPUS_PATH = "dataset/raw/empathetic_stories.csv"
 RESULTS_DIR = "evaluation/results"
-
-RUN_FILES = {
-    "BM25": os.path.join(RESULTS_DIR, "bm25_run.csv"),
-    "SBERT": os.path.join(RESULTS_DIR, "sbert_run.csv"),
-    "RRF": os.path.join(RESULTS_DIR, "rrf_run.csv"),
-    "OURS": os.path.join(RESULTS_DIR, "ours_run.csv"),
-}
-
-K_LIST = [5, 10]  
+K_LIST = [5, 10]
 # ----------------------------------------
 
+def pretty_method_name(stem: str) -> str:
+    s = stem.lower()
+    if s == "bm25":
+        return "BM25"
+    if s == "sbert":
+        return "SBERT"
+    if s == "rrf":
+        return "RRF"
+    if s == "ours":
+        return "OURS"
+    if s == "ce":
+        return "CE-Rerank"
+    if s.startswith("wemo_"):
+        val = s.split("_", 1)[1]
+        return f"OURS-wemo={val}"
+    return stem
 
 def load_corpus(corpus_path: str) -> pd.DataFrame:
     df = pd.read_csv(corpus_path)
@@ -28,13 +37,11 @@ def load_corpus(corpus_path: str) -> pd.DataFrame:
             f"Corpus missing columns: {missing}. Found columns: {list(df.columns)}"
         )
 
-    # Normalize naming
     df = df.rename(columns={"emotion_label": "emotion", "Story": "text"})
     df["emotion"] = df["emotion"].fillna("").astype(str)
     df["story_id"] = df["story_id"].astype(int)
 
     return df[["story_id", "emotion"]]
-
 
 def load_queries(dataset_dir: str) -> pd.DataFrame:
     qpath = os.path.join(dataset_dir, "queries.csv")
@@ -52,7 +59,6 @@ def load_queries(dataset_dir: str) -> pd.DataFrame:
     q["target_emotion"] = q["target_emotion"].fillna("").astype(str)
     return q
 
-
 def load_run(path: str) -> pd.DataFrame:
     df = pd.read_csv(path)
     required_cols = {"query_id", "story_id", "rank"}
@@ -65,50 +71,30 @@ def load_run(path: str) -> pd.DataFrame:
     df["rank"] = df["rank"].astype(int)
     return df
 
-
-def emotional_fidelity_at_k(
-    run_df: pd.DataFrame,
-    queries_df: pd.DataFrame,
-    storyid_to_emotion: dict,
-    k: int,
-) -> pd.DataFrame:
+def emotional_fidelity_at_k(run_df, queries_df, storyid_to_emotion, k: int) -> pd.DataFrame:
     """
-    Returns per-query emotional fidelity@k:
+    per-query emotional fidelity@k:
     proportion of top-k retrieved docs with emotion == target_emotion.
     """
-    # Keep top-k rows per query
     topk = run_df[run_df["rank"] <= k].copy()
 
-    # Join query target emotion
     topk = topk.merge(
         queries_df[["query_id", "target_emotion", "query_type"]],
         on="query_id",
         how="left",
     )
 
-    # Map retrieved story emotion
     topk["retrieved_emotion"] = topk["story_id"].map(storyid_to_emotion).fillna("")
-
-    # Match?
     topk["em_match"] = (topk["retrieved_emotion"] == topk["target_emotion"]).astype(int)
 
-    # Aggregate per query
     per_q = (
         topk.groupby(["query_id", "query_type", "target_emotion"], as_index=False)["em_match"]
         .mean()
         .rename(columns={"em_match": f"emo_fidelity@{k}"})
     )
-
     return per_q
 
-
 def summarize(per_query_df: pd.DataFrame, k: int, method_name: str) -> pd.DataFrame:
-    """
-    Builds a compact summary table for:
-      - overall
-      - emotion_intent only
-      - non emotion_intent
-    """
     col = f"emo_fidelity@{k}"
 
     def safe_mean(x):
@@ -121,7 +107,7 @@ def summarize(per_query_df: pd.DataFrame, k: int, method_name: str) -> pd.DataFr
 
     non_mask = ~emo_mask
     non_emo = safe_mean(per_query_df.loc[non_mask, col].values)
-    
+
     return pd.DataFrame(
         [
             {"Method": method_name, "Subset": "overall", f"EmoFidelity@{k}": overall},
@@ -130,30 +116,32 @@ def summarize(per_query_df: pd.DataFrame, k: int, method_name: str) -> pd.DataFr
         ]
     )
 
-
 def main():
     os.makedirs(RESULTS_DIR, exist_ok=True)
+    runs_dir = Path(RESULTS_DIR)
+
+    run_paths = sorted(runs_dir.glob("*_run.csv"))
+    if not run_paths:
+        raise FileNotFoundError(f"No *_run.csv files found in {runs_dir.resolve()}")
 
     queries = load_queries(DATASET_DIR)
     corpus = load_corpus(CORPUS_PATH)
-
     storyid_to_emotion = dict(zip(corpus["story_id"], corpus["emotion"]))
 
-    # Store per-query results for all methods and k
+    # Start per-query table with base query info
     per_query_all = queries[["query_id", "query_type", "target_emotion"]].copy()
-
     summary_rows = []
 
-    for method, path in RUN_FILES.items():
-        if not os.path.exists(path):
-            raise FileNotFoundError(f"Missing run file: {path}")
+    for run_path in run_paths:
+        stem = run_path.name.replace("_run.csv", "")
+        method = pretty_method_name(stem)
 
-        run_df = load_run(path)
+        run_df = load_run(str(run_path))
 
         for k in K_LIST:
             per_q = emotional_fidelity_at_k(run_df, queries, storyid_to_emotion, k)
 
-            # Merge into per_query_all
+            # Merge per-query scores into wide table
             per_query_all = per_query_all.merge(
                 per_q[["query_id", f"emo_fidelity@{k}"]].rename(
                     columns={f"emo_fidelity@{k}": f"{method}_emo_fidelity@{k}"}
@@ -162,9 +150,7 @@ def main():
                 how="left",
             )
 
-            # Summary table rows
-            summary_k = summarize(per_q, k, method)
-            summary_rows.append(summary_k)
+            summary_rows.append(summarize(per_q, k, method))
 
     summary_df = pd.concat(summary_rows, ignore_index=True)
 
@@ -174,11 +160,10 @@ def main():
     summary_df.to_csv(out_summary, index=False)
     per_query_all.to_csv(out_per_query, index=False)
 
-    print("\n=== Emotional Fidelity Results ===")
+    print("\n=== Emotional Fidelity Summary ===")
     print(summary_df.to_string(index=False))
-    print(f"\n✅ Saved: {out_summary}")
-    print(f"✅ Saved: {out_per_query}")
-
+    print(f"\nSaved: {out_summary}")
+    print(f"Saved: {out_per_query}")
 
 if __name__ == "__main__":
     main()
