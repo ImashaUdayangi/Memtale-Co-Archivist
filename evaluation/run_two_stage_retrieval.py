@@ -4,7 +4,7 @@ import re
 import numpy as np
 import pandas as pd
 from rank_bm25 import BM25Okapi
-from sentence_transformers import SentenceTransformer, util
+from sentence_transformers import SentenceTransformer, util, CrossEncoder
 
 from src.setl2 import setl2_vector_np  # SETL-2 emotion vector (8 dims)
 
@@ -16,6 +16,16 @@ RESULTS_DIR = "evaluation/results"
 
 SBERT_MODEL = "all-MiniLM-L6-v2"
 RRF_K = 60
+
+# ----- Weight Sensitivity Configs (M3) -----
+WEIGHT_CONFIGS = {
+    "wemo_0.00": (0.40, 0.60, 0.00),
+    "wemo_0.10": (0.35, 0.55, 0.10),
+    "wemo_0.20": (0.30, 0.50, 0.20),
+    "wemo_0.30": (0.30, 0.40, 0.30),  # current OURS
+    "wemo_0.40": (0.25, 0.35, 0.40),
+    "wemo_0.50": (0.20, 0.30, 0.50),
+}
 
 os.makedirs(RESULTS_DIR, exist_ok=True)
 
@@ -87,12 +97,18 @@ doc_embs = sbert.encode(
     show_progress_bar=True
 )
 
+# ---------------- Build Cross-Encoder ONCE (CE-Rerank baseline) ----------------
+cross_encoder = CrossEncoder("cross-encoder/ms-marco-MiniLM-L-6-v2")
+
 # ---------------- Build SETL-2 emotion vectors ONCE ----------------
 # each doc vector is 8-dim in fixed order [joy, sadness, anger, fear, trust, disgust, surprise, anticipation]
 doc_emo_vecs = np.vstack([setl2_vector_np(t) for t in docs_text]).astype(float)
 
 # ---------------- Run containers ----------------
-all_runs = {"bm25": [], "sbert": [], "rrf": [], "ours": []}
+all_runs = {"bm25": [], "sbert": [], "rrf": [], "ce": [], "ours": []}
+
+for cfg_name in WEIGHT_CONFIGS.keys():
+    all_runs[cfg_name] = []
 
 for _, q in queries.iterrows():
     qid = q["query_id"]
@@ -111,6 +127,13 @@ for _, q in queries.iterrows():
 
     # ----- RRF baseline (BM25 + SBERT) -----
     rrf_rank = rrf(bm25_top_idx, sbert_top_idx, k=RRF_K)
+
+    # ----- CE-Rerank baseline: rerank BM25 topK using CrossEncoder -----
+    cand_texts = [docs_text[i] for i in bm25_top_idx]
+    ce_pairs = [(qtext, t) for t in cand_texts]
+    ce_scores = cross_encoder.predict(ce_pairs)  # higher = better
+    ce_order = np.argsort(ce_scores)[::-1]
+    ce_ranked_idx = bm25_top_idx[ce_order]
 
     # ----- OURS: rerank BM25 topK using (BM25_norm + SBERT_sim + SETL2_emotion_sim) -----
     # Adaptive weights (rule-based expert system, not tuned on test)
@@ -142,6 +165,20 @@ for _, q in queries.iterrows():
 
     reranked = sorted(rerank_scores.items(), key=lambda x: x[1], reverse=True)
 
+    # ----- M3 Weight Sensitivity (emotion_intent only): produce extra run files -----
+    if qtype == "emotion_intent":
+        for cfg_name, (wb, ws, we) in WEIGHT_CONFIGS.items():
+            cfg_scores = {}
+            for pos, idx in enumerate(bm25_top_idx):
+                sem = float(sbert_scores[idx])
+                emo = cosine_sim(doc_emo_vecs[idx], q_emo_vec)
+                cfg_scores[idx] = (wb * float(bm25_norm[pos])) + (ws * sem) + (we * emo)
+
+            cfg_ranked = sorted(cfg_scores.items(), key=lambda x: x[1], reverse=True)
+
+            for rank, (idx, _) in enumerate(cfg_ranked[:K], start=1):
+                all_runs[cfg_name].append([qid, int(doc_ids[idx]), rank])
+
     # ----- Save runs in TREC-like format: query_id, story_id, rank -----
     for rank, idx in enumerate(bm25_top_idx, start=1):
         all_runs["bm25"].append([qid, int(doc_ids[idx]), rank])
@@ -151,6 +188,9 @@ for _, q in queries.iterrows():
 
     for rank, (idx, _) in enumerate(rrf_rank[:K], start=1):
         all_runs["rrf"].append([qid, int(doc_ids[idx]), rank])
+
+    for rank, idx in enumerate(ce_ranked_idx[:K], start=1):
+        all_runs["ce"].append([qid, int(doc_ids[idx]), rank])
 
     for rank, (idx, _) in enumerate(reranked[:K], start=1):
         all_runs["ours"].append([qid, int(doc_ids[idx]), rank])
