@@ -7,7 +7,7 @@ RESULTS_DIR = "evaluation/results"
 CORPUS_PATH = "dataset/raw/empathetic_stories.csv"
 
 BM25_RUN = os.path.join(RESULTS_DIR, "bm25_run.csv")
-OURS_RUN = os.path.join(RESULTS_DIR, "ours_run.csv")
+OURS_RUN = os.path.join(RESULTS_DIR, "wemo_0.20_run.csv")
 PERQ_PATH = os.path.join(RESULTS_DIR, "per_query_metrics_for_significance.csv")
 QUERIES_PATH = os.path.join(DATASET_DIR, "queries.csv")
 
