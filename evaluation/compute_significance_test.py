@@ -130,6 +130,9 @@ for method, path in RUN_PATHS.items():
     df = df.sort_values(["query_id", "rank"])
     runs[method] = df
 
+    # sanity check: each query should have ranks starting at 1
+    # (not mandatory, but helps catch incomplete files)
+
 # ---------------- Compute per-query metrics ----------------
 # We'll compute for ALL queries in queries.csv
 per_query_rows = []
@@ -206,6 +209,7 @@ add_test("MRR", "CE-Rerank", label="OURS vs CE-Rerank")
 add_test(f"EmoFidelity@{K_EMO}", "BM25", label="OURS vs BM25")
 add_test(f"EmoFidelity@{K_EMO}", "CE-Rerank", label="OURS vs CE-Rerank")
 add_test(f"EmoFidelity@{K_EMO}", "RRF", label="OURS vs RRF")
+add_test(f"EmoFidelity@{K_EMO}", "SBERT", label="OURS vs SBERT")
 
 summary = pd.DataFrame(tests)
 summary_out = os.path.join(RESULTS_DIR, "significance_summary.csv")
