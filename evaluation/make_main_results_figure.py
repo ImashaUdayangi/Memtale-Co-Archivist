@@ -34,6 +34,10 @@ def main():
 
     # ---- Load evaluation summary (nDCG@5, MRR) ----
     eval_df = pd.read_csv(EVAL_SUMMARY_PATH)
+    # --- Choose final OURS (wemo=0.20) and drop other OURS variants ---
+    eval_df = eval_df[eval_df["Method"].isin(["BM25", "SBERT", "RRF", "CE-Rerank", "OURS-wemo=0.20"])].copy()
+    eval_df.loc[eval_df["Method"] == "OURS-wemo=0.20", "Method"] = "OURS"
+
     if not {"Method", "nDCG@5", "MRR"}.issubset(eval_df.columns):
         raise ValueError(
             f"{EVAL_SUMMARY_PATH} must contain columns: Method, nDCG@5, MRR. "
@@ -44,6 +48,9 @@ def main():
 
     # ---- Load emotional fidelity summary (EmoFidelity@5 overall) ----
     emo_df = pd.read_csv(EMO_SUMMARY_PATH)
+    # --- Choose final OURS (wemo=0.20) and drop other OURS variants ---
+    emo_df = emo_df[emo_df["Method"].isin(["BM25", "SBERT", "RRF", "CE-Rerank", "OURS-wemo=0.20"])].copy()
+    emo_df.loc[emo_df["Method"] == "OURS-wemo=0.20", "Method"] = "OURS"
     # Expect columns: Method, Subset, EmoFidelity@5, EmoFidelity@10
     needed = {"Method", "Subset", "EmoFidelity@5"}
     if not needed.issubset(emo_df.columns):
@@ -69,7 +76,7 @@ def main():
     )
 
     # Desired order for the plot
-    method_order = ["BM25", "SBERT", "RRF", "OURS"]
+    method_order = ["BM25", "SBERT", "RRF", "CE-Rerank", "OURS"]
     merged["Method"] = pd.Categorical(merged["Method"], categories=method_order, ordered=True)
     merged = merged.sort_values("Method")
 
@@ -109,7 +116,7 @@ def main():
     plt.savefig(OUT_PNG, dpi=300)
     plt.close()
 
-    print("✅ Saved combined grouped bar chart:")
+    print(" Saved combined grouped bar chart:")
     print(f" - {OUT_PNG}")
     print("\nData used:")
     print(merged.to_string(index=False))
